@@ -1,12 +1,53 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import Product from "../schema/ProductSchema";
+import {
+  BaseError,
+  NotFoundError,
+  ValidationError,
+} from "../middlewares/errors";
 
 /**
  * Controller function to add a new product to the database
  * @param request - Express Request object
  * @param response - Express Response object
  */
-export const addNewProduct = async (req: Request, res: Response) => {
-  res.send("addNewProduct");
+export const addNewProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // Extract name, description, and category from request body
+  const { name, description, category } = req.body;
+
+  // Validate required fields
+  const errors: Record<string, string>[] = [];
+  if (!name) errors.push({ field: "name", message: "Name is required!" });
+  if (!description)
+    errors.push({ field: "description", message: "Description is required!" });
+  if (!category)
+    errors.push({ field: "category", message: "Category is required!" });
+
+  // If there are validation errors, pass them to the next middleware
+  if (errors.length > 0) {
+    return next(new ValidationError(errors));
+  }
+
+  // Create a new Product document
+  const newProduct = new Product({ name, description, category });
+
+  try {
+    // Save the new product to the database
+    await newProduct.save();
+
+    // Respond with 201 status code and success message
+    res.status(201).json({
+      message: "Successfully added new Product",
+      newProduct,
+    });
+  } catch (error) {
+    // Handle any errors that occur during the database operation
+    next(error);
+  }
 };
 
 /**
@@ -14,8 +55,26 @@ export const addNewProduct = async (req: Request, res: Response) => {
  * @param request - Express Request object
  * @param response - Express Response object
  */
-export const getAllProducts = async (req: Request, res: Response) => {
-  res.send("getAllProducts");
+export const getAllProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // Retrieve all products from the database
+    const products = await Product.find().exec();
+
+    // If no products are found, you can optionally throw a NotFoundError
+    if (!products || products.length === 0) {
+      return next(new BaseError("No products found", 404));
+    }
+
+    // Respond with 200 status code and the retrieved products
+    res.status(200).json(products);
+  } catch (error) {
+    // Handle any errors that occur during database operation
+    next(error); // Forward the error to the centralized error handler
+  }
 };
 
 /**
@@ -23,21 +82,67 @@ export const getAllProducts = async (req: Request, res: Response) => {
  * @param request - Express Request object
  * @param response - Express Response object
  */
-export const getSingleProductDetails = async (req: Request, res: Response) => {
+export const getSingleProductDetails = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   // Extract ID from request parameters
   const { id } = req.params;
-  res.send("getSingleProductDetails");
-};
 
+  try {
+    // Find the product in the database by ID
+    const matchedProduct = await Product.findById(id).exec();
+
+    // Check if product was found
+    if (!matchedProduct) {
+      // If product was not found, throw a NotFoundError
+      return next(new NotFoundError("Product not found"));
+    }
+
+    // If product was found, respond with product data
+    res.status(200).json(matchedProduct);
+  } catch (error) {
+    // Handle any errors that occur during database operation
+    next(error); // Forward the error to the centralized error handler
+  }
+};
 /**
  * Controller function to update a product by ID
  * @param request - Express Request object
  * @param response - Express Response object
  */
-export const updateProduct = async (req: Request, res: Response) => {
+export const updateProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   // Extract ID from request parameters
   const { id } = req.params;
-  res.send("updateProduct");
+
+  // Extract product data from request body
+  const { product } = req.body;
+
+  try {
+    // Find and update the Product by ID
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      product, // Directly use the product object for update
+      { new: true } // Return the updated document
+    ).exec();
+
+    // Check if the product was found and updated successfully
+    if (!updatedProduct) {
+      // If the product was not found, throw a NotFoundError
+      return next(new NotFoundError(`Product with ID: ${id} not found`));
+    }
+
+    // Respond with success message if the product was updated
+    res.status(200).json({ message: "Successfully updated", updatedProduct });
+  } catch (error) {
+    // Forward any errors to the centralized error handler
+    next(error);
+  }
 };
 
 /**
@@ -45,8 +150,31 @@ export const updateProduct = async (req: Request, res: Response) => {
  * @param request - Express Request object
  * @param response - Express Response object
  */
-export const deleteProduct = async (req: Request, res: Response) => {
+export const deleteProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   // Extract ID from request parameters
   const { id } = req.params;
-  res.send("deleteProduct");
+
+  try {
+    // Find and delete the Product by ID
+    const deletedProduct = await Product.findByIdAndDelete(id).exec();
+
+    // Check if Product was found and deleted successfully
+    if (!deletedProduct) {
+      // If the product was not found, throw a NotFoundError
+      return next(new NotFoundError(`Product with ID: ${id} not found`));
+    }
+
+    // Respond with success message if Product was deleted
+    res.status(200).json({
+      message: "Successfully deleted Product",
+      deletedProduct, // Optionally include the deleted Product in the response
+    });
+  } catch (error) {
+    // Forward any errors to the centralized error handler
+    next(error);
+  }
 };
