@@ -5,7 +5,6 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 const AdminDashboard: FC = () => {
   const { isAuthenticated, user, isLoading } = useKindeBrowserClient();
-  console.log(user?.email);
 
   return (
     <section>

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import AdminAuthSkeleton from "../components/AdminAuthSkeleton";
-import AdminDashboard from "../components/AdminDashboard";
+import AdminAuthSkeleton from "../components/adminPage/AdminAuthSkeleton";
+import AdminDashboard from "../components/adminPage/AdminDashboard";
 
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
