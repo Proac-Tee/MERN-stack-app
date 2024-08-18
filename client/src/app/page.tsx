@@ -1,3 +1,4 @@
+import FAQ from "./components/Landingpage/FAQ";
 import Hero from "./components/Landingpage/Hero";
 import Overview from "./components/Landingpage/Overview";
 
@@ -9,6 +10,7 @@ export default function Home() {
       </div>
       <div className=" bg-white overflow-hidden px-[1rem] md:px-[2rem] xl:px-[5rem]">
         <Overview />
+        <FAQ />
       </div>
     </main>
   );

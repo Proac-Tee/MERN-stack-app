@@ -1,5 +1,5 @@
 import { plus_Jakarta_Sans } from "@/app/utils/fonts";
-import React from "react";
+import React, { FC } from "react";
 import global_sorucing_image from "../../../assets/Worldwide Delivery.svg";
 import delivery_image from "../../../assets/Delivery.svg";
 import customer_centric_image from "../../../assets/Customer Insights Manager.svg";
@@ -12,10 +12,10 @@ import end_to_end_support_image from "../../../assets/Headset.svg";
 
 import Image from "next/image";
 
-const Overview = () => {
+const Overview: FC = () => {
   return (
     <section>
-      <article className="flex flex-col justify-center items-center gap-[1rem] max-w-[616px] mx-auto pt-[3rem] md:pb-[5rem]">
+      <article className="flex flex-col justify-center items-center gap-[1rem] max-w-[616px] mx-auto py-[3rem]">
         <h2
           className={`text-[#18181B] leading-[2rem] md:leading-[3rem]  font-bold text-[1.625rem] md:text-[2.625rem] text-center ${plus_Jakarta_Sans.className}`}
         >
@@ -29,7 +29,7 @@ const Overview = () => {
       </article>
 
       <section>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 pb-[5rem]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           <div className="flex justify-center items-center sm:border-r border-b h-[286.5px] border-[#E4E4E7]">
             <div className="flex flex-col gap-4 w-full max-w-[330px] h-[217px] p-4 justify-center items-center text-center">
               <div className="pb-[1rem] flex justify-center items-center">

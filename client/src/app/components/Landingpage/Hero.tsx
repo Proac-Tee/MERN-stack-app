@@ -1,10 +1,10 @@
 import { inter, plus_Jakarta_Sans } from "@/app/utils/fonts";
 import Link from "next/link";
-import React from "react";
+import React, { FC } from "react";
 import hero_image from "../../../assets/hero_image.png";
 import Image from "next/image";
 
-const Hero = () => {
+const Hero: FC = () => {
   return (
     <section className="relative w-[100%] h-[100%]">
       <section className="flex justify-between items-center flex-col lg:flex-row ">
@@ -24,12 +24,12 @@ const Hero = () => {
           <div className="flex items-center gap-[2rem]">
             <Link
               href={`/`}
-              className={`bg-[#18181B] text-white w-fit h-[3.25rem] py-[1.5rem] px-[3rem] rounded-[10px] flex justify-center items-center font-bold text-[0.875rem] md:text-[1.125rem] leading-[24px]  ${plus_Jakarta_Sans.className}`}
+              className={`bg-primary_color text-white w-fit h-[3.25rem] py-[1.5rem] px-[3rem] rounded-[10px] flex justify-center items-center font-bold text-[0.875rem] md:text-[1.125rem] leading-[24px] hover:brightness-75 transition-all ease-in-out duration-300 ${plus_Jakarta_Sans.className}`}
             >
               Contact Us
             </Link>
             <Link
-              className={`text-[#18181B] text-[0.75rem] md:text-[0.875rem] leading-[1.375rem] font-bold  ${plus_Jakarta_Sans.className}`}
+              className={`text-[#18181B] text-[0.75rem] md:text-[0.875rem] leading-[1.375rem] font-bold hover:text-primary_color transition-all ease-in-out duration-300 ${plus_Jakarta_Sans.className}`}
               href={`/`}
             >
               Explore brands
