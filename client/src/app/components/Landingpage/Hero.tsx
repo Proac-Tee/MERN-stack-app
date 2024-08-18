@@ -4,24 +4,6 @@ import React from "react";
 import hero_image from "../../../assets/hero_image.png";
 import Image from "next/image";
 
-const content = [
-  {
-    title: "Global Sourcing",
-    description:
-      "We partner with trusted suppliers worldwide to ensure high-quality products.",
-  },
-  {
-    title: "Efficient Logistics",
-    description:
-      "Our logistics network guarantees timely and cost-effective deliveries.",
-  },
-  {
-    title: "Customer-Centric",
-    description:
-      "We provide tailored solutions and dedicated support for our partners.",
-  },
-];
-
 const Hero = () => {
   return (
     <section className="relative w-[100%] h-[100%]">
@@ -93,23 +75,6 @@ const Hero = () => {
           />
         </div>
       </section>
-      {/* <section className="bg-secondary_black w-[100%] min-h-[298px] rounded-[2.5rem] p-[4rem]">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {content.map((item, index) => (
-            <div key={index} className="grid gap-[1.5rem]">
-              <div className="grid gap-[0.75rem]">
-                <p>xx</p>
-                <h3 className="text-[2rem] text-primary_gray font-semibold mb-2">
-                  {item.title}
-                </h3>
-              </div>
-              <p className="text-[1.125rem] leading-[26px] line-clamp-2 text-white">
-                {item.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section> */}
     </section>
   );
 };
