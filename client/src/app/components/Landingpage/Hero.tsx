@@ -23,14 +23,14 @@ const Hero: FC = () => {
           </p>
           <div className="flex items-center gap-[2rem]">
             <Link
-              href={`/`}
+              href={`/contact-us`}
               className={`bg-primary_color text-white w-fit h-[3.25rem] py-[1.5rem] px-[3rem] rounded-[10px] flex justify-center items-center font-bold text-[0.875rem] md:text-[1.125rem] leading-[24px] hover:brightness-75 transition-all ease-in-out duration-300 ${plus_Jakarta_Sans.className}`}
             >
               Contact Us
             </Link>
             <Link
               className={`text-[#18181B] text-[0.75rem] md:text-[0.875rem] leading-[1.375rem] font-bold hover:text-primary_color transition-all ease-in-out duration-300 ${plus_Jakarta_Sans.className}`}
-              href={`/`}
+              href={`/products`}
             >
               Explore brands
             </Link>

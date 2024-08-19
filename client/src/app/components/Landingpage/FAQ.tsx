@@ -3,6 +3,7 @@ import { inter, plus_Jakarta_Sans } from "@/app/utils/fonts";
 import Image from "next/image";
 import React, { FC, useEffect, useRef, useState } from "react";
 import avatar_group_image from "../../../assets/Avatar group.svg";
+import Link from "next/link";
 type FAQItem = {
   question: string;
   answer: string;
@@ -82,7 +83,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
             >
               <path
                 d="M8 14H16M22 14C22 19.5228 17.5228 24 12 24C6.47715 24 2 19.5228 2 14C2 8.47715 6.47715 4 12 4C17.5228 4 22 8.47715 22 14Z"
-                stroke="#7F56D9"
+                stroke="#D02027"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -98,7 +99,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
             >
               <path
                 d="M12 10V18M8 14H16M22 14C22 19.5228 17.5228 24 12 24C6.47715 24 2 19.5228 2 14C2 8.47715 6.47715 4 12 4C17.5228 4 22 8.47715 22 14Z"
-                stroke="#7F56D9"
+                stroke="#D02027"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -129,7 +130,7 @@ const FAQ: FC = () => {
   };
   return (
     <section>
-      <div className="flex flex-col gap-[0.5rem] pt-[6rem]">
+      <div className="flex flex-col gap-[0.5rem] pt-[1rem] md:pt-[6rem]">
         <h3
           className={`text-[#18181B] leading-[1.75rem] md:leading-[2.75rem] font-semibold text-[1.25rem] md:text-[2.25rem] text-center ${plus_Jakarta_Sans.className}`}
         >
@@ -138,7 +139,7 @@ const FAQ: FC = () => {
         <p
           className={`text-[#52525b] text-center text-[0.875rem] md:text-[1.25rem] ${plus_Jakarta_Sans.className}`}
         >
-          Everything you need to know about the product.
+          What you need to know
         </p>
       </div>
 
@@ -165,7 +166,7 @@ const FAQ: FC = () => {
           />
         </div>
         <div className=" flex flex-col items-center  gap-[2rem]">
-          <div className="pt-[2rem]">
+          <div className="pt-[2rem] px-[1rem]">
             <h4
               className={`text-[#101828] text-center text-[0.875rem] md:text-[1.25rem] font-medium  ${plus_Jakarta_Sans.className}`}
             >
@@ -174,13 +175,16 @@ const FAQ: FC = () => {
             <p
               className={`text-[#667085] text-center text-[0.75rem] md:text-[1.125rem] font-medium ${inter.className}`}
             >
-              Can't find the answer you're looking for? Please chat to our
-              friendly team.
+              Can&rsquo;t find the answer you&rsquo;re looking for? Please chat
+              to our friendly team.
             </p>
           </div>
-          <button className="w-[130px] h-[44px] flex justify-center items-center rounded-[0.5rem] bg-primary_color text-white text-[1rem] font-medium">
+          <Link
+            href={`/contact-us`}
+            className="w-[130px] h-[44px] flex justify-center items-center rounded-[0.5rem] bg-primary_color text-white text-[1rem] font-medium hover:brightness-75 "
+          >
             Get in touch
-          </button>
+          </Link>
         </div>
       </section>
     </section>
