@@ -1,18 +1,11 @@
 "use client";
 import { inter, plus_Jakarta_Sans } from "@/app/utils/fonts";
 import Image from "next/image";
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useState } from "react";
 import avatar_group_image from "../../../assets/Avatar group.svg";
 import Link from "next/link";
+import AccordionItem from "@/app/utils/AccordionItem";
 type FAQItem = {
-  question: string;
-  answer: string;
-};
-
-type AccordionItemProps = {
-  index: number;
-  activeIndex: number | null;
-  toggleAccordion: (index: number) => void;
   question: string;
   answer: string;
 };
@@ -44,83 +37,6 @@ const faqData: FAQItem[] = [
       "Yes, we offer customized solutions, including flexible order quantities and dedicated account management to meet the unique needs of our partners.",
   },
 ];
-
-const AccordionItem: React.FC<AccordionItemProps> = ({
-  index,
-  activeIndex,
-  toggleAccordion,
-  question,
-  answer,
-}) => {
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (contentRef.current) {
-      contentRef.current.style.maxHeight =
-        activeIndex === index ? `${contentRef.current.scrollHeight}px` : "0px";
-    }
-  }, [activeIndex, index]);
-
-  return (
-    <div className="border-b py-[0.5rem] border-gray-200">
-      <button
-        className="w-full text-left py-4 flex justify-between items-center focus:outline-none"
-        onClick={() => toggleAccordion(index)}
-      >
-        <span
-          className={`text-lg font-medium text-[#18181B] ${plus_Jakarta_Sans.className}`}
-        >
-          {question}
-        </span>
-        <span className="text-gray-800">
-          {activeIndex === index ? (
-            <svg
-              width="24"
-              height="26"
-              viewBox="0 0 24 26"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 14H16M22 14C22 19.5228 17.5228 24 12 24C6.47715 24 2 19.5228 2 14C2 8.47715 6.47715 4 12 4C17.5228 4 22 8.47715 22 14Z"
-                stroke="#D02027"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          ) : (
-            <svg
-              width="24"
-              height="26"
-              viewBox="0 0 24 26"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 10V18M8 14H16M22 14C22 19.5228 17.5228 24 12 24C6.47715 24 2 19.5228 2 14C2 8.47715 6.47715 4 12 4C17.5228 4 22 8.47715 22 14Z"
-                stroke="#D02027"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          )}
-        </span>
-      </button>
-      <div
-        ref={contentRef}
-        className="max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
-      >
-        <div
-          className={`pb-[2rem] text-[1rem] font-[400] text-[#667085] ${plus_Jakarta_Sans.className}`}
-        >
-          {answer}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const FAQ: FC = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);

@@ -4,12 +4,12 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 const plus_Jakarta_Sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Admin",
-  description: "Admin",
-  keywords: "Admin",
+  title: "Products",
+  description: "Products",
+  keywords: "Products",
 };
 
-export default function AdminLayout({
+export default function ProductsLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
