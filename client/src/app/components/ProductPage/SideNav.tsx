@@ -39,7 +39,7 @@ const SideNav: React.FC<SideNavProps> = ({ categories, onSelectionChange }) => {
     <div className="w-full">
       <>
         <h3 className="font-bold lg:text-xl text-primary_black">
-          Product by Category
+          Browse by Category
         </h3>
       </>
       {categories.map((category, categoryIndex) => (

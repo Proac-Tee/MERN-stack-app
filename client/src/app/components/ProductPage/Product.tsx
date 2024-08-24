@@ -2,19 +2,32 @@
 
 import React, { useState } from "react";
 import SideNav from "./SideNav";
+import ProductGrid from "@/app/utils/ProductGrid";
+import { useQuery } from "@tanstack/react-query";
+import { getProductsData } from "@/app/action/actions";
 
-type SubCategory = {
+interface ISubcategory {
   name: string;
-  selected: boolean; // Include the selected property in the type definition
-};
+  selected: boolean; // Indicates if the subcategory is selected or not.
+}
 
-type Category = {
+// Define the structure of a category that contains an array of subcategories.
+interface ICategory {
   name: string;
-  subcategories: SubCategory[];
-};
+  subcategories: ISubcategory[]; // An array of subcategories.
+}
+
+// Define the structure of a product that includes a category.
+interface IProduct {
+  // id: string,
+  name: string;
+  description: string;
+  category: ICategory; // A product has one category.
+  createdAt: Date; // Timestamp for when the product was created.
+}
 
 // Define the initial categories with all the categories you provided
-const initialCategories: Category[] = [
+const initialCategories: ICategory[] = [
   {
     name: "Electronics",
     subcategories: [
@@ -108,15 +121,30 @@ const initialCategories: Category[] = [
 ];
 
 const Product: React.FC = () => {
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const { data, isPending, error } = useQuery({
+    queryKey: ["productsData"],
+    queryFn: () => getProductsData(),
+  });
 
-  const handleSelectionChange = (updatedCategories: Category[]) => {
+  const [categories, setCategories] = useState<ICategory[]>(initialCategories);
+
+  const handleSelectionChange = (updatedCategories: ICategory[]) => {
     setCategories(updatedCategories);
     console.log("Selected Categories:", updatedCategories);
   };
 
+  if (isPending) return "Loading...";
+
+  if (error) return "An error has occurred: " + error.message;
+
   return (
-    <section className="max-w-container mx-auto">
+    <section className="max-w-[1440px] mx-auto p-4 ">
+      <div className="w-full py-10 xl:py-10 flex flex-col gap-3">
+        <h1 className="text-5xl text-primary_black font-titleFont font-bold">
+          Products
+        </h1>
+      </div>
+
       <div className="w-full h-full flex pb-20 gap-10">
         <aside className="w-[20%] md:w-[25%] hidden md:inline-flex h-full">
           <SideNav
@@ -124,6 +152,9 @@ const Product: React.FC = () => {
             onSelectionChange={handleSelectionChange}
           />
         </aside>
+        <section className="w-full md:w-[80%] lg:w-[75%] h-full flex flex-col gap-10">
+          <ProductGrid products={data} />
+        </section>
       </div>
     </section>
   );

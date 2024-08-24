@@ -3,8 +3,10 @@ import React, { FC, useState } from "react";
 import { plus_Jakarta_Sans } from "../utils/fonts";
 import Link from "next/link";
 import MobileLinkDropdown from "./MobileLinkDropdown";
+import { usePathname } from "next/navigation";
 
 const Header: FC = () => {
+  const pathname = usePathname();
   const [dropDown, setDropDown] = useState<boolean>(false);
 
   const openDropdown: () => void = () => {
@@ -53,7 +55,11 @@ const Header: FC = () => {
               <li>
                 <Link
                   aria-current="page"
-                  className="block py-2 px-3 text-white bg-red-700 rounded md:bg-transparent md:text-red-700 md:p-0 dark:text-white md:dark:text-red-500"
+                  className={`block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0 dark:text-white md:dark:hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${
+                    pathname === "/"
+                      ? "text-red-700 font-bold"
+                      : "text-gray-900  "
+                  }`}
                   href={`/`}
                 >
                   Home
@@ -61,7 +67,11 @@ const Header: FC = () => {
               </li>
               <li>
                 <Link
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0 dark:text-white md:dark:hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className={`block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0 dark:text-white md:dark:hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${
+                    pathname === "/products"
+                      ? "text-red-700 font-bold"
+                      : "text-gray-900"
+                  }`}
                   href={`/products`}
                 >
                   Products
@@ -70,7 +80,11 @@ const Header: FC = () => {
               <li>
                 <Link
                   href={`/about-us`}
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0 dark:text-white md:dark:hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className={`block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0 dark:text-white md:dark:hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${
+                    pathname === "/about-us"
+                      ? "text-red-700 font-bold"
+                      : "text-gray-900  "
+                  }`}
                 >
                   About
                 </Link>
@@ -79,7 +93,11 @@ const Header: FC = () => {
               <li>
                 <Link
                   href={`/contact-us`}
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0 dark:text-white md:dark:hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className={`block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0 dark:text-white md:dark:hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${
+                    pathname === "/contact-us"
+                      ? "text-red-700 font-bold"
+                      : "text-gray-900  "
+                  }`}
                 >
                   Contact
                 </Link>

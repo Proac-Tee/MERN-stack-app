@@ -25,7 +25,7 @@ async function main() {
 // Middleware to restrict cross origin access
 app.use(
   cors({
-    origin: "http://localhost:5173", // Specify the origin allowed to access your backend
+    origin: "http://127.0.0.1:3000", // Specify the origin allowed to access your backend
     methods: ["GET,POST,PATCH,DELETE"], // Specify the HTTP methods allowed
     credentials: true, // Allow cookies and HTTP authentication to be included in requests
     allowedHeaders: ["Content-Type", "Authorization"], // Allow only these headers

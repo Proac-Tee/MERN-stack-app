@@ -16,7 +16,6 @@ export const addNewProduct = async (
   res: Response,
   next: NextFunction
 ) => {
-  // Extract name, description, and category from request body
   const { name, description, category } = req.body;
 
   // Validate required fields
@@ -24,8 +23,28 @@ export const addNewProduct = async (
   if (!name) errors.push({ field: "name", message: "Name is required!" });
   if (!description)
     errors.push({ field: "description", message: "Description is required!" });
-  if (!category)
-    errors.push({ field: "category", message: "Category is required!" });
+  if (
+    !category ||
+    typeof category !== "object" ||
+    !category.name ||
+    !Array.isArray(category.subcategories)
+  ) {
+    errors.push({
+      field: "category",
+      message:
+        "Category must be an object with a name and an array of subcategories!",
+    });
+  } else {
+    // Validate subcategories
+    category.subcategories.forEach((subcategory: any, index: number) => {
+      if (typeof subcategory !== "object" || !subcategory.name) {
+        errors.push({
+          field: `category.subcategories[${index}]`,
+          message: "Each subcategory must be an object with a name!",
+        });
+      }
+    });
+  }
 
   // If there are validation errors, pass them to the next middleware
   if (errors.length > 0) {
@@ -33,7 +52,14 @@ export const addNewProduct = async (
   }
 
   // Create a new Product document
-  const newProduct = new Product({ name, description, category });
+  const newProduct = new Product({
+    name,
+    description,
+    category: {
+      name: category.name,
+      subcategories: category.subcategories,
+    },
+  });
 
   try {
     // Save the new product to the database
@@ -66,7 +92,7 @@ export const getAllProducts = async (
 
     // If no products are found, you can optionally throw a NotFoundError
     if (!products || products.length === 0) {
-      return next(new BaseError("No products found", 404));
+      return [];
     }
 
     // Respond with 200 status code and the retrieved products
