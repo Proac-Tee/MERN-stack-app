@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideNav from "./SideNav";
 import ProductGrid from "@/app/utils/ProductGrid";
 import { useQuery } from "@tanstack/react-query";
 import { getProductsData } from "@/app/action/actions";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface ISubcategory {
   name: string;
@@ -19,7 +20,7 @@ interface ICategory {
 
 // Define the structure of a product that includes a category.
 interface IProduct {
-  // id: string,
+  _id: string;
   name: string;
   description: string;
   category: ICategory; // A product has one category.
@@ -121,16 +122,57 @@ const initialCategories: ICategory[] = [
 ];
 
 const Product: React.FC = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [filteredData, setFilteredData] = useState<IProduct[]>([]);
   const { data, isPending, error } = useQuery({
     queryKey: ["productsData"],
     queryFn: () => getProductsData(),
   });
 
-  const [categories, setCategories] = useState<ICategory[]>(initialCategories);
+  useEffect(() => {
+    if (data) {
+      filterData();
+    }
+  }, [data, searchParams]);
 
-  const handleSelectionChange = (updatedCategories: ICategory[]) => {
-    setCategories(updatedCategories);
-    console.log("Selected Categories:", updatedCategories);
+  const updateSearchParams = (updatedCategories: ICategory[]) => {
+    const params = new URLSearchParams();
+
+    updatedCategories.forEach((category) => {
+      category.subcategories.forEach((subcategory) => {
+        if (subcategory.selected) {
+          params.append("subcategory", subcategory.name);
+        }
+      });
+    });
+
+    router.push(`/products?${params.toString()}`, { scroll: false });
+  };
+
+  const filterData = () => {
+    let filteredProducts = data;
+
+    const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+    const selectedSubcategories = searchParams.getAll("subcategory");
+
+    // Filter by search query (matches product name)
+    if (searchQuery) {
+      filteredProducts = filteredProducts.filter((product: IProduct) =>
+        product.name.toLowerCase().includes(searchQuery)
+      );
+    }
+
+    // Filter by selected subcategories
+    if (selectedSubcategories.length > 0) {
+      filteredProducts = filteredProducts.filter((product: IProduct) =>
+        selectedSubcategories.includes(
+          product.category.subcategories.find((sub) => sub.selected)?.name || ""
+        )
+      );
+    }
+
+    setFilteredData(filteredProducts);
   };
 
   if (isPending) return "Loading...";
@@ -148,12 +190,12 @@ const Product: React.FC = () => {
       <div className="w-full h-full flex pb-20 gap-10">
         <aside className="w-[20%] md:w-[25%] hidden md:inline-flex h-full">
           <SideNav
-            categories={categories}
-            onSelectionChange={handleSelectionChange}
+            categories={initialCategories}
+            onSelectionChange={updateSearchParams}
           />
         </aside>
         <section className="w-full md:w-[80%] lg:w-[75%] h-full flex flex-col gap-10">
-          <ProductGrid products={data} />
+          <ProductGrid products={filteredData} />
         </section>
       </div>
     </section>

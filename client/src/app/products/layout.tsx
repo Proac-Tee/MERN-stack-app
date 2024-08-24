@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import ProductSearchHeader from "../components/ProductPage/ProductSearchHeader";
 
 const plus_Jakarta_Sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -14,5 +15,10 @@ export default function ProductsLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main className={plus_Jakarta_Sans.className}>{children}</main>;
+  return (
+    <main className={plus_Jakarta_Sans.className}>
+      <ProductSearchHeader />
+      {children}
+    </main>
+  );
 }
