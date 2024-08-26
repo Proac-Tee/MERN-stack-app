@@ -1,6 +1,7 @@
 "use client";
 import { useAppContext } from "../context/AppContext";
 import AddProducts from "./AddProducts";
+import ProductDeleteComponent from "./ProductDeleteComponent";
 
 const Modal = () => {
   const { showModal, setShowModal } = useAppContext();
@@ -19,7 +20,7 @@ const Modal = () => {
       case "editProducts":
         return <div>Edit Products Component</div>;
       case "deleteProducts":
-        return <div>Delete Products Component</div>;
+        return <ProductDeleteComponent />;
       default:
         return null;
     }

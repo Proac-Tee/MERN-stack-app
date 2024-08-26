@@ -13,15 +13,15 @@ const router = Router();
 router.get("/products", getAllProducts);
 
 // GET request to fetch product details by ID
-router.get("/product/:id", getSingleProductDetails);
+router.get("/product/:_id", getSingleProductDetails);
 
 // POST request to create a new product
 router.post("/product", addNewProduct);
 
 // PUT request to update product details by ID
-router.patch("/product/:id", updateProduct);
+router.patch("/product/:_id", updateProduct);
 
 // DELETE request to delete product by ID
-router.delete("/product/:id", deleteProduct);
+router.delete("/product/:_id", deleteProduct);
 
 export { router };

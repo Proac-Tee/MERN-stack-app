@@ -1,10 +1,12 @@
 "use client";
+import React, { useEffect, useRef } from "react";
+
 import { getProductsData } from "@/app/action/actions";
 import { useAppContext } from "@/app/context/AppContext";
+import AdminDashboardDropdown from "@/app/utils/AdminDashboardDropdown";
 import { formatDate } from "@/app/utils/formatDate";
 import { IError, IProduct } from "@/app/utils/types";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 
 // Type guard to check if products is an array of IProduct
 const isProductArray = (
@@ -14,12 +16,34 @@ const isProductArray = (
 };
 
 const ProductTable = () => {
-  const { setShowModal } = useAppContext();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { setShowModal, setDropdownProductId, dropdownProductId } =
+    useAppContext();
 
   const { data, isPending, error } = useQuery({
     queryKey: ["productsData"],
     queryFn: () => getProductsData(),
   });
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Check if the click occurred outside of the dropdown
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownProductId(null);
+      }
+    };
+
+    // Add event listener to handle clicks outside of the dropdown
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      // Cleanup: remove event listener when the component is unmounted
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setDropdownProductId]);
 
   if (isPending) return "Loading...";
 
@@ -46,6 +70,14 @@ const ProductTable = () => {
       </section>
     );
   }
+
+  const handleDropdownClick = (event: MouseEvent) => {
+    event.stopPropagation();
+  };
+
+  const handleClick = (productId: string) => {
+    setDropdownProductId(dropdownProductId === productId ? null : productId);
+  };
 
   if (isProductArray(data)) {
     return (
@@ -128,22 +160,33 @@ const ProductTable = () => {
                       </span>
                       {formatDate(data.createdAt)}
                     </p>
-                    <button className=" text-center p-[0.75rem] font-[400] text-[0.875rem] truncate flex justify-center items-center cursor-pointer">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-6"
+                    <div
+                      ref={dropdownRef}
+                      className="relative flex justify-end"
+                    >
+                      <button
+                        className="cursor-pointer text-center p-[0.75rem] font-[400] text-[0.875rem] truncate flex justify-center items-center"
+                        onClick={() => handleClick(data._id)}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-                        />
-                      </svg>
-                    </button>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="size-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                          />
+                        </svg>
+                      </button>
+                      {dropdownProductId === data._id && (
+                        <AdminDashboardDropdown _id={data._id} />
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>

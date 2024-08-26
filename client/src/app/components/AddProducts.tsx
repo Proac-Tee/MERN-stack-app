@@ -9,10 +9,10 @@ import { useAppContext } from "../context/AppContext";
 import SubmitButton from "./SubmitButton";
 import { useMutation } from "@tanstack/react-query";
 
-const backend_uri = process.env.NEXT_PUBLIC_BACKEND_URI;
+export const backend_uri = process.env.NEXT_PUBLIC_BACKEND_URI;
 
 const AddProductForm = () => {
-  const { setShowModal } = useAppContext();
+  const { setShowModal, setErrors, errors } = useAppContext();
 
   const ref = useRef<HTMLFormElement>(null);
   const [name, setName] = useState<string>("");
@@ -24,7 +24,7 @@ const AddProductForm = () => {
     ISubcategory[]
   >([]);
   const [file, setFile] = useState<File | null>(null);
-  const [errors, setErrors] = useState<{ [key: string]: string } | null>(null);
+
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const { mutate } = useMutation({

@@ -18,6 +18,8 @@ export const addNewProduct = async (
 ) => {
   const { name, description, category } = req.body;
 
+  console.log(req.body);
+
   // Validate required fields
   const errors: Record<string, string>[] = [];
   if (!name) errors.push({ field: "name", message: "Name is required!" });
@@ -182,16 +184,16 @@ export const deleteProduct = async (
   next: NextFunction
 ) => {
   // Extract ID from request parameters
-  const { id } = req.params;
+  const { _id } = req.params;
 
   try {
     // Find and delete the Product by ID
-    const deletedProduct = await Product.findByIdAndDelete(id).exec();
+    const deletedProduct = await Product.findByIdAndDelete(_id).exec();
 
     // Check if Product was found and deleted successfully
     if (!deletedProduct) {
       // If the product was not found, throw a NotFoundError
-      return next(new NotFoundError(`Product with ID: ${id} not found`));
+      return next(new NotFoundError(`Product with ID: ${_id} not found`));
     }
 
     // Respond with success message if Product was deleted
