@@ -1,34 +1,13 @@
 "use client";
+import { createContext, ReactNode, useContext, useState } from "react";
 
-import { createContext, ReactNode, useState } from "react";
-
-// Subcategory interface
-interface ISubcategory {
-  name: string;
-  selected: boolean; // Indicates if the subcategory is selected or not.
-}
-
-// Category interface that contains an array of subcategories
-interface ICategory {
-  name: string;
-  subcategories: ISubcategory[]; // An array of subcategories.
-}
-
-// Product interface that includes a category
-interface IProduct {
-  name: string;
-  description: string;
-  category: ICategory; // A product has one category.
-  createdAt: Date; // Timestamp for when the product was created.
-}
-
-// Context value type
 type AppContextProps = {
-  productsData: IProduct[];
   loading: boolean;
+  showModal: string | null;
+  setShowModal: (modalName: string | null) => void;
 };
 
-// Creating the context with an initial undefined value
+// Create the context
 const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 interface AppProviderProps {
@@ -36,13 +15,14 @@ interface AppProviderProps {
 }
 
 const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [productsData, setProductsData] = useState<IProduct[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  // Context value
+  const [showModal, setShowModal] = useState<string | null>(null);
+
   const appContextValue: AppContextProps = {
-    productsData,
     loading,
+    showModal,
+    setShowModal,
   };
 
   return (
@@ -52,4 +32,13 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   );
 };
 
-export { AppContext, AppProvider };
+// Custom hook
+const useAppContext = () => {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("useAppContext must be used within an AppProvider");
+  }
+  return context;
+};
+
+export { AppProvider, useAppContext };

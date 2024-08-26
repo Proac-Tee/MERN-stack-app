@@ -7,3 +7,30 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* Chrome, Safari, Edge, Opera */
+.no-arrow::-webkit-outer-spin-button,
+.no-arrow::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.select-with-padding option {
+  padding: 20px;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.table-grid {
+  display: grid;
+  grid-template-columns: 20% 40% 15% 15% 10%;
+  justify-content: space-between;
+}

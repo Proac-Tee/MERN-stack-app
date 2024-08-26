@@ -32,13 +32,13 @@ const Overview: FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           <div className="flex justify-center items-center sm:border-r border-b h-[286.5px] border-[#E4E4E7]">
             <div className="flex flex-col gap-4 w-full max-w-[330px] h-[217px] p-4 justify-center items-center text-center">
-              <div className="pb-[1rem] flex justify-center items-center">
+              <div className="p-[1rem] flex justify-center items-center bg-orange-100 rounded-full">
                 <Image
                   quality={100}
                   sizes="(min-width: 768px) 100vw, 700px"
                   src={global_sorucing_image}
                   alt="Global sorucing image"
-                  className=" w-[44px] h-[44px]"
+                  className=" w-[24px] h-[24px]"
                 />
               </div>
               <h3
@@ -55,13 +55,13 @@ const Overview: FC = () => {
           </div>
           <div className="flex justify-center items-center border-r-0 lg:border-r border-b h-[286.5px] border-[#E4E4E7]">
             <div className="flex flex-col gap-4 w-full max-w-[330px] h-[217px] p-4 justify-center items-center text-center">
-              <div className="pb-[1rem] flex justify-center items-center">
+              <div className="p-[0.5rem] flex justify-center items-center bg-blue-100 rounded-full">
                 <Image
                   quality={100}
                   sizes="(min-width: 768px) 100vw, 700px"
                   src={delivery_image}
                   alt="Delivery image"
-                  className=" w-[44px] h-[44px]"
+                  className=" w-[24px] h-[24px]"
                 />
               </div>
               <h3
@@ -79,13 +79,13 @@ const Overview: FC = () => {
           </div>
           <div className="flex justify-center items-center  sm:border-r lg:border-r-0 border-b h-[286.5px] border-[#E4E4E7]">
             <div className="flex flex-col gap-4 w-full max-w-[330px] h-[217px] p-4 justify-center items-center text-center">
-              <div className="pb-[1rem] flex justify-center items-center">
+              <div className="p-[1rem] flex justify-center items-center bg-green-100 rounded-full">
                 <Image
                   quality={100}
                   sizes="(min-width: 768px) 100vw, 700px"
                   src={customer_centric_image}
                   alt="Customer centric image"
-                  className=" w-[44px] h-[44px]"
+                  className=" w-[24px] h-[24px]"
                 />
               </div>
               <h3
@@ -103,13 +103,13 @@ const Overview: FC = () => {
           </div>
           <div className="flex justify-center items-center border-r-0 lg:border-r border-b h-[286.5px] border-[#E4E4E7]">
             <div className="flex flex-col gap-4 w-full max-w-[330px] h-[217px] p-4 justify-center items-center text-center">
-              <div className="pb-[1rem] flex justify-center items-center">
+              <div className="p-[1rem] flex justify-center items-center bg-purple-100 rounded-full">
                 <Image
                   quality={100}
                   sizes="(min-width: 768px) 100vw, 700px"
                   src={sustainability_practices_image}
                   alt="Sustainability Practices"
-                  className=" w-[44px] h-[44px]"
+                  className=" w-[24px] h-[24px]"
                 />
               </div>
               <h3
@@ -127,13 +127,13 @@ const Overview: FC = () => {
           </div>
           <div className="flex justify-center items-center sm:border-r border-b h-[286.5px] border-[#E4E4E7]">
             <div className="flex flex-col gap-4 w-full max-w-[330px] h-[217px] p-4 justify-center items-center text-center">
-              <div className="pb-[1rem] flex justify-center items-center">
+              <div className="p-[1rem] flex justify-center items-center bg-gray-100 rounded-full">
                 <Image
                   quality={100}
                   sizes="(min-width: 768px) 100vw, 700px"
                   src={technology_integration_image}
                   alt="Technology Integration"
-                  className=" w-[44px] h-[44px]"
+                  className=" w-[24px] h-[24px]"
                 />
               </div>
               <h3
@@ -151,13 +151,13 @@ const Overview: FC = () => {
           </div>
           <div className="flex justify-center items-center  border-r-0 border-b h-[286.5px] border-[#E4E4E7]">
             <div className="flex flex-col gap-4 w-full max-w-[330px] h-[217px] p-4 justify-center items-center text-center">
-              <div className="pb-[1rem] flex justify-center items-center">
+              <div className="p-[1rem] flex justify-center items-center bg-yellow-100 rounded-full">
                 <Image
                   quality={100}
                   sizes="(min-width: 768px) 100vw, 700px"
                   src={quality_assurance_image}
                   alt="Quality Assurance"
-                  className=" w-[44px] h-[44px]"
+                  className=" w-[24px] h-[24px]"
                 />
               </div>
               <h3
@@ -175,13 +175,13 @@ const Overview: FC = () => {
           </div>
           <div className="flex justify-center items-center sm:border-r border-b lg:border-b-0 h-[286.5px] border-[#E4E4E7]">
             <div className="flex flex-col gap-4 w-full max-w-[330px] h-[217px] p-4 justify-center items-center text-center">
-              <div className="pb-[1rem] flex justify-center items-center">
+              <div className="p-[1rem] flex justify-center items-center bg-gray-100 rounded-full">
                 <Image
                   quality={100}
                   sizes="(min-width: 768px) 100vw, 700px"
                   src={strategic_partnerships_image}
                   alt="Strategic Partnerships"
-                  className=" w-[44px] h-[44px]"
+                  className=" w-[24px] h-[24px]"
                 />
               </div>
               <h3
@@ -199,13 +199,13 @@ const Overview: FC = () => {
           </div>
           <div className="flex justify-center items-center border-r-0 lg:border-r border-b h-[286.5px] lg:border-0  border-[#E4E4E7]">
             <div className="flex flex-col gap-4 w-full max-w-[330px] h-[217px] p-4 justify-center items-center text-center">
-              <div className="pb-[1rem] flex justify-center items-center">
+              <div className="p-[1rem] flex justify-center items-center bg-rose-100 rounded-full">
                 <Image
                   quality={100}
                   sizes="(min-width: 768px) 100vw, 700px"
                   src={market_insights_image}
                   alt="Market Insights"
-                  className=" w-[44px] h-[44px]"
+                  className=" w-[24px] h-[24px]"
                 />
               </div>
               <h3
@@ -223,13 +223,13 @@ const Overview: FC = () => {
           </div>
           <div className="flex justify-center items-center border-[#E4E4E7] sm:border-r lg:border-0 h-[286.5px]">
             <div className="flex flex-col gap-4 w-full max-w-[330px] h-[217px] p-4 justify-center items-center text-center">
-              <div className="pb-[1rem] flex justify-center items-center">
+              <div className="p-[1rem] flex justify-center items-center bg-lime-100 rounded-full">
                 <Image
                   quality={100}
                   sizes="(min-width: 768px) 100vw, 700px"
                   src={end_to_end_support_image}
                   alt="End-to-End Support"
-                  className=" w-[44px] h-[44px]"
+                  className=" w-[24px] h-[24px]"
                 />
               </div>
               <h3

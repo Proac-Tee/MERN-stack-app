@@ -92,15 +92,17 @@ const SideNav: React.FC<SideNavProps> = ({ categories, onSelectionChange }) => {
                   key={subcategoryIndex}
                   className="p-2 hover:bg-gray-50 flex items-center text-[#767676] text-sm lg:text-base"
                 >
-                  <input
-                    type="checkbox"
-                    checked={subcategory.selected}
-                    onChange={() =>
-                      handleCheckboxChange(categoryIndex, subcategoryIndex)
-                    }
-                    className="mr-2"
-                  />
-                  <span>{subcategory.name}</span>
+                  <label className="cursor-pointer w-[100%]">
+                    <input
+                      type="checkbox"
+                      checked={subcategory.selected}
+                      onChange={() =>
+                        handleCheckboxChange(categoryIndex, subcategoryIndex)
+                      }
+                      className="mr-2"
+                    />
+                    <span>{subcategory.name}</span>
+                  </label>
                 </div>
               ))}
             </div>

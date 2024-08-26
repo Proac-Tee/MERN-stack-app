@@ -18,17 +18,14 @@ export default async function Admin() {
   const permissions = await getPermissions();
   const accessToken = await getAccessTokenRaw();
 
-  if (!isUserAuthenticated) {
-    redirect(`/api/auth/login`);
-  }
+  // if (!isUserAuthenticated) {
+  //   redirect(`/api/auth/login`);
+  // }
 
   return (
-    <main>
-      Admin
-      <div>
-        <AdminAuthSkeleton />
-        <AdminDashboard />
-      </div>
-    </main>
+    <section className="w-[100%] h-[100%] min-h-[100vh] px-[1rem] max-w-[1400px]  md:px-[2rem] lg:px-[5rem]">
+      {/* <AdminAuthSkeleton /> */}
+      <AdminDashboard />
+    </section>
   );
 }

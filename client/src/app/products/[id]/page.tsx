@@ -1,8 +1,10 @@
 "use client";
 import { getProductsData } from "@/app/action/actions";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import x from "../../../assets/ZHENArtboard 1 copy@3x.png";
 
 interface ISubcategory {
   name: string;
@@ -74,7 +76,15 @@ const ProductDetails = ({ params }: { params: { id: string } }) => {
                 className="flex items-center gap-4 border-b-[1px] border-b-gray-300 py-2 cursor-pointer"
                 onClick={() => handleOtherProductDetailsRoute(product._id)}
               >
-                <div className="w-[95.99px] h-[95.99px] bg-gray-200"></div>
+                <div className="relative w-[95.99px] h-[95.99px] bg-gray-200">
+                  <Image
+                    quality={100}
+                    sizes="(min-width: 768px) 100vw, 700px"
+                    src={x}
+                    alt="Product image"
+                    fill
+                  />
+                </div>
                 <div className="flex flex-col gap-2 font-semibold">
                   <h5 className="text-base font-medium">{product.name}</h5>
                   <p className="text-sm font-semibold">
@@ -85,7 +95,15 @@ const ProductDetails = ({ params }: { params: { id: string } }) => {
             ))}
           </section>
         </section>
-        <section className="h-full min-h-[400px] xl:col-span-2 bg-gray-200"></section>
+        <section className="relative h-full min-h-[400px] xl:col-span-2 bg-gray-200">
+          <Image
+            quality={100}
+            sizes="(min-width: 768px) 100vw, 700px"
+            src={x}
+            alt="Product image"
+            fill
+          />
+        </section>
         <section className="h-full w-full md:col-span-2 xl:col-span-3 xl:p-14 flex flex-col gap-6 justify-center">
           <div className="flex flex-col gap-5">
             <h2 className="text-4xl font-semibold">{product.name}</h2>

@@ -3,6 +3,7 @@ import "./globals.css";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Providers from "./utils/Provider";
+import Modal from "./components/Modal";
 import { AppProvider } from "./context/AppContext";
 
 export const metadata: Metadata = {
@@ -18,11 +19,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>
-          <Header />
-          {children}
-          <Footer />
-        </Providers>
+        <AppProvider>
+          <Providers>
+            <Header />
+            <Modal />
+            {children}
+            <Footer />
+          </Providers>
+        </AppProvider>
       </body>
     </html>
   );
