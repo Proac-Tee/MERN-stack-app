@@ -1,13 +1,13 @@
 "use client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { backend_uri } from "./AddProducts";
 import { ExtractedProductData, ICategory, ISubcategory } from "../utils/types";
 import { initialCategories } from "../utils/intialCategories";
 import DOMPurify from "dompurify";
-import { updateProduct } from "../action/actions";
+import { getProductsData, updateProduct } from "../action/actions";
 import SubmitButton from "./SubmitButton";
 
 const ProductUpdateComponent = () => {
@@ -16,6 +16,7 @@ const ProductUpdateComponent = () => {
   const router = useRouter();
   const { setShowDropdown, setShowModal, setUpdateErrors, updateErrors } =
     useAppContext();
+
   const ref = useRef<HTMLFormElement>(null);
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -26,16 +27,21 @@ const ProductUpdateComponent = () => {
     ISubcategory[]
   >([]);
 
+  const { data, isPending, error } = useQuery({
+    queryKey: ["productsData"],
+    queryFn: () => getProductsData(),
+  });
+
   const _id = searchParams.get("_id") || "";
   const { mutate } = useMutation({
-    mutationFn: async (formData: ExtractedProductData) => {
+    mutationFn: async (extractedData: ExtractedProductData) => {
       const response = await fetch(`${backend_uri}/api/product/${_id}`, {
-        method: "UPDATE",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           //   Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(extractedData),
       });
 
       const data = await response.json();
@@ -58,8 +64,9 @@ const ProductUpdateComponent = () => {
     },
     onSuccess: (data) => {
       alert(data.message);
-      ref.current?.reset();
       setShowModal(null);
+      // Remove the search param from the URL after successful deletion
+      router.replace(`/admin`); // Removes all query params
       queryClient.invalidateQueries({ queryKey: ["productsData"] });
     },
     onError: (error: any) => {
@@ -144,15 +151,43 @@ const ProductUpdateComponent = () => {
           })),
         },
       };
-      console.log(extractedData);
 
-      //   mutate(extractedData);
+      mutate(extractedData);
     } else if (response.errors) {
       setUpdateErrors(response.errors); // Set the validation errors in the state
     } else {
       alert("An unexpected error occurred.");
     }
   };
+
+  // Use `useEffect` to handle the success case when data is fetched
+  // Use `useEffect` to handle the success case when data is fetched
+  useEffect(() => {
+    if (data) {
+      const product: ExtractedProductData = data.find(
+        (prod: { _id: string }) => prod._id === _id
+      );
+
+      if (product) {
+        setName(product.name);
+        setDescription(product.description);
+
+        const category =
+          initialCategories.find((cat) => cat.name === product.category.name) ||
+          null;
+        setSelectedCategory(category);
+
+        const subcategories =
+          category?.subcategories.filter((sub) =>
+            product.category.subcategories.some(
+              (prodSub) => prodSub.name === sub.name
+            )
+          ) || [];
+
+        setSelectedSubcategories(subcategories);
+      }
+    }
+  }, [data, _id]);
 
   return (
     <form className="w-[100%] py-[2rem] mx-auto" ref={ref} action={formHandler}>

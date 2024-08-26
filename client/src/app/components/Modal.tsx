@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useAppContext } from "../context/AppContext";
 import AddProducts from "./AddProducts";
 import ProductDeleteComponent from "./ProductDeleteComponent";
@@ -6,7 +7,7 @@ import ProductUpdateComponent from "./ProductUpdateComponent";
 
 const Modal = () => {
   const { showModal, setShowModal } = useAppContext();
-
+  const router = useRouter();
   const renderModalContent = () => {
     switch (showModal) {
       case "addProducts":
@@ -34,6 +35,11 @@ const Modal = () => {
     }
   };
 
+  const handleClose = () => {
+    setShowModal(null);
+    router.replace(`/admin`, { scroll: false });
+  };
+
   return (
     <>
       {showModal && (
@@ -41,7 +47,7 @@ const Modal = () => {
           <div className="m-auto py-[2rem] lg:p-8">
             <div className="relative flex flex-col items-center">
               <div className="top-[1rem] right-[2rem] text-primary_black z-10 absolute">
-                <button type="button" onClick={() => setShowModal(null)}>
+                <button type="button" onClick={handleClose}>
                   <svg
                     width="24"
                     height="24"

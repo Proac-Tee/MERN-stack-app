@@ -26,7 +26,7 @@ async function main() {
 app.use(
   cors({
     origin: "http://127.0.0.1:3000", // Specify the origin allowed to access your backend
-    methods: ["GET,POST,PATCH,DELETE"], // Specify the HTTP methods allowed
+    methods: ["GET,POST,PUT,DELETE"], // Specify the HTTP methods allowed
     credentials: true, // Allow cookies and HTTP authentication to be included in requests
     allowedHeaders: ["Content-Type", "Authorization"], // Allow only these headers
   })

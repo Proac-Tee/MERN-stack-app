@@ -60,6 +60,11 @@ const ProductDeleteComponent = () => {
     },
   });
 
+  const handleClose = () => {
+    setShowModal(null);
+    router.replace(`/admin`, { scroll: false });
+  };
+
   return (
     <section className="bg-white w-[90vw] md:w-[400px]  rounded-[0.5rem] flex justify-center items-center flex-col py-[2rem] gap-[1.5rem]  px-[2.5rem] relative ">
       <div className="flex justify-center items-center flex-col gap-[0.25rem]">
@@ -90,7 +95,7 @@ const ProductDeleteComponent = () => {
       </div>
       <div className="text-[0.875rem] flex justify-center items-center w-[100%] gap-[0.5rem]">
         <button
-          onClick={() => setShowModal(null)}
+          onClick={handleClose}
           className="border-[1px] flex-1 flex justify-center items-center rounded-[6.25rem] h-[44px] border-[#D0D5DD] py-[0.875rem] px-[1.25rem] "
         >
           No, cancel

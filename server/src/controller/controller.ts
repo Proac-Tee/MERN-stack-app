@@ -18,8 +18,6 @@ export const addNewProduct = async (
 ) => {
   const { name, description, category } = req.body;
 
-  console.log(req.body);
-
   // Validate required fields
   const errors: Record<string, string>[] = [];
   if (!name) errors.push({ field: "name", message: "Name is required!" });
@@ -116,11 +114,11 @@ export const getSingleProductDetails = async (
   next: NextFunction
 ) => {
   // Extract ID from request parameters
-  const { id } = req.params;
+  const { _id } = req.params;
 
   try {
     // Find the product in the database by ID
-    const matchedProduct = await Product.findById(id).exec();
+    const matchedProduct = await Product.findById(_id).exec();
 
     // Check if product was found
     if (!matchedProduct) {
@@ -146,23 +144,66 @@ export const updateProduct = async (
   next: NextFunction
 ) => {
   // Extract ID from request parameters
-  const { id } = req.params;
+  const { _id } = req.params;
 
   // Extract product data from request body
-  const { product } = req.body;
+  const { name, description, category } = req.body;
+
+  // Validate required fields
+  const errors: Record<string, string>[] = [];
+  if (!name) errors.push({ field: "name", message: "Name is required!" });
+  if (!description)
+    errors.push({ field: "description", message: "Description is required!" });
+  if (
+    !category ||
+    typeof category !== "object" ||
+    !category.name ||
+    !Array.isArray(category.subcategories)
+  ) {
+    errors.push({
+      field: "category",
+      message:
+        "Category must be an object with a name and an array of subcategories!",
+    });
+  } else {
+    // Validate subcategories
+    category.subcategories.forEach((subcategory: any, index: number) => {
+      if (typeof subcategory !== "object" || !subcategory.name) {
+        errors.push({
+          field: `category.subcategories[${index}]`,
+          message: "Each subcategory must be an object with a name!",
+        });
+      }
+    });
+  }
+
+  // If there are validation errors, pass them to the next middleware
+  if (errors.length > 0) {
+    return next(new ValidationError(errors));
+  }
+
+  // Create a new Product document
+  const newProduct = {
+    name,
+    description,
+    category: {
+      name: category.name,
+      subcategories: category.subcategories,
+    },
+  };
 
   try {
     // Find and update the Product by ID
     const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      product, // Directly use the product object for update
+      _id,
+      newProduct, // Directly use the product object for update
       { new: true } // Return the updated document
     ).exec();
 
     // Check if the product was found and updated successfully
     if (!updatedProduct) {
       // If the product was not found, throw a NotFoundError
-      return next(new NotFoundError(`Product with ID: ${id} not found`));
+      return next(new NotFoundError(`Product with ID: ${_id} not found`));
     }
 
     // Respond with success message if the product was updated
