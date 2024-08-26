@@ -28,9 +28,15 @@ const AdminDashboardDropdown: FC<DashboardDropdownProps> = ({ _id }) => {
   };
 
   const updateListingHandler = () => {
-    console.log(_id);
+    setShowModal("editProducts");
+    const params = new URLSearchParams();
+    if (_id) {
+      params.set("_id", _id);
+    } else {
+      params.delete("_id");
+    }
+    router.push(`/admin?${params.toString()}`, { scroll: false });
   };
-
   return (
     <section>
       <div className="absolute top-[2.5rem] z-20  right-[1rem] bg-white h-[122px] text-[0.875rem] border-[1px] border-[#F2F4F7] rounded-[0.5rem] w-[240px]">

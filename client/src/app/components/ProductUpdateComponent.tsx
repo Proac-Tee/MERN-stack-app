@@ -1,19 +1,21 @@
 "use client";
-
-import { ChangeEvent, DragEvent, useRef, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { ChangeEvent, useRef, useState } from "react";
+import { useAppContext } from "../context/AppContext";
+import { backend_uri } from "./AddProducts";
 import { ExtractedProductData, ICategory, ISubcategory } from "../utils/types";
 import { initialCategories } from "../utils/intialCategories";
-import { addProduct } from "../action/actions";
 import DOMPurify from "dompurify";
-import { useAppContext } from "../context/AppContext";
+import { updateProduct } from "../action/actions";
 import SubmitButton from "./SubmitButton";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const backend_uri = process.env.NEXT_PUBLIC_BACKEND_URI;
-
-const AddProductForm = () => {
-  const { setShowModal, setErrors, errors } = useAppContext();
+const ProductUpdateComponent = () => {
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const { setShowDropdown, setShowModal, setUpdateErrors, updateErrors } =
+    useAppContext();
   const ref = useRef<HTMLFormElement>(null);
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -23,19 +25,16 @@ const AddProductForm = () => {
   const [selectedSubcategories, setSelectedSubcategories] = useState<
     ISubcategory[]
   >([]);
-  const [file, setFile] = useState<File | null>(null);
 
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-
+  const _id = searchParams.get("_id") || "";
   const { mutate } = useMutation({
     mutationFn: async (formData: ExtractedProductData) => {
-      const response = await fetch(`${backend_uri}/api/product`, {
-        method: "POST",
+      const response = await fetch(`${backend_uri}/api/product/${_id}`, {
+        method: "UPDATE",
         headers: {
           "Content-Type": "application/json",
           //   Authorization: `Bearer ${token}`,
         },
-
         body: JSON.stringify(formData),
       });
 
@@ -48,7 +47,7 @@ const AddProductForm = () => {
             formattedErrors[err.field] = err.message;
           }
         );
-        setErrors(formattedErrors); // Set the errors in the state to be displayed in the form
+        setUpdateErrors(formattedErrors); // Set the errors in the state to be displayed in the form
       }
 
       if (!response.ok) {
@@ -70,9 +69,11 @@ const AddProductForm = () => {
         error.errors.forEach((err: { field: string; message: string }) => {
           formattedErrors[err.field] = err.message;
         });
-        setErrors(formattedErrors); // Set the errors in the state to be displayed in the form
+        setUpdateErrors(formattedErrors); // Set the errors in the state to be displayed in the form
       } else {
-        alert(error.message || "Failed to add the product. Please try again.");
+        alert(
+          error.message || "Failed to update the product. Please try again."
+        );
       }
     },
   });
@@ -103,61 +104,16 @@ const AddProductForm = () => {
     }
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      validateAndSetFile(selectedFile);
-    }
-  };
-
-  const handleDragOver = (e: DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e: DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile) {
-      validateAndSetFile(droppedFile);
-    }
-  };
-
-  const validateAndSetFile = (selectedFile: File) => {
-    if (
-      selectedFile.type === "image/png" ||
-      selectedFile.type === "image/jpeg"
-    ) {
-      if (selectedFile.size <= 5 * 1024 * 1024) {
-        // Check if the file size is within the limit (5MB)
-        setFile(selectedFile);
-        setErrors(null);
-      } else {
-        setErrors({ file: "File size exceeds 5MB" });
-      }
-    } else {
-      setErrors({ file: "Invalid file type. Only PNG or JPG is allowed." });
-    }
-  };
-
   const formHandler = async (formData: FormData) => {
     if (!selectedCategory) {
-      setErrors({ category: "Please select a category" });
+      setUpdateErrors({ category: "Please select a category" });
       return;
     }
 
     if (selectedSubcategories.length === 0) {
-      setErrors({ subcategories: "Please select at least one subcategory" });
-      return;
-    }
-
-    if (!file) {
-      setErrors({ file: "Please upload a file." });
+      setUpdateErrors({
+        subcategories: "Please select at least one subcategory",
+      });
       return;
     }
 
@@ -168,17 +124,13 @@ const AddProductForm = () => {
       formData.append("subcategories[]", sub.name)
     );
 
-    // if (file) {
-    //   formData.set("file", file);
-    // }
-
     // Convert FormData to a plain object for client side validation
     const sanitizedData: { [key: string]: string } = {};
     formData.forEach((value, key) => {
       sanitizedData[key] = DOMPurify.sanitize(value as string);
     });
 
-    const response = await addProduct(formData);
+    const response = await updateProduct(formData);
 
     if (response.success && response.productData) {
       // Create a new object with only the extracted fields
@@ -192,10 +144,11 @@ const AddProductForm = () => {
           })),
         },
       };
+      console.log(extractedData);
 
-      mutate(extractedData);
+      //   mutate(extractedData);
     } else if (response.errors) {
-      setErrors(response.errors); // Set the validation errors in the state
+      setUpdateErrors(response.errors); // Set the validation errors in the state
     } else {
       alert("An unexpected error occurred.");
     }
@@ -219,8 +172,8 @@ const AddProductForm = () => {
           onChange={(e) => setName(e.target.value)}
           required
         />
-        {errors?.name && (
-          <p className="text-red-700 py-[0.3rem]">{errors.name}</p>
+        {updateErrors?.name && (
+          <p className="text-red-700 py-[0.3rem]">{updateErrors.name}</p>
         )}
       </div>
 
@@ -239,8 +192,8 @@ const AddProductForm = () => {
           onChange={(e) => setDescription(e.target.value)}
           required
         />
-        {errors?.description && (
-          <p className="text-red-700 py-[0.3rem]">{errors.description}</p>
+        {updateErrors?.description && (
+          <p className="text-red-700 py-[0.3rem]">{updateErrors.description}</p>
         )}
       </div>
 
@@ -265,8 +218,8 @@ const AddProductForm = () => {
             </option>
           ))}
         </select>
-        {errors?.category && (
-          <p className="text-red-700 py-[0.3rem]">{errors.category}</p>
+        {updateErrors?.category && (
+          <p className="text-red-700 py-[0.3rem]">{updateErrors.category}</p>
         )}
       </div>
 
@@ -291,74 +244,17 @@ const AddProductForm = () => {
               </label>
             </div>
           ))}
-          {errors?.subcategories && (
-            <p className="text-red-700 py-[0.3rem]">{errors.subcategories}</p>
+          {updateErrors?.subcategories && (
+            <p className="text-red-700 py-[0.3rem]">
+              {updateErrors.subcategories}
+            </p>
           )}
         </div>
       )}
-
-      <div className="mb-5">
-        <label
-          htmlFor="file"
-          className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 dark:border-gray-600 
-          ${
-            isDragging
-              ? "bg-gray-100 dark:bg-gray-600 border-blue-500"
-              : "border-gray-300"
-          }`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-          <div className="flex flex-col items-center justify-center text-center pt-5 pb-6 px-[0.4rem]">
-            <svg
-              className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 16"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-              />
-            </svg>
-            {file ? (
-              <p className="text-green-700 py-[0.3rem]">
-                Selected file: {file.name}
-              </p>
-            ) : (
-              <div>
-                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                  <span className="font-semibold">Click to upload</span> or drag
-                  and drop
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  PNG or JPG (MAX. 5MB)
-                </p>
-              </div>
-            )}
-          </div>
-          <input
-            id="file"
-            type="file"
-            onChange={handleFileChange}
-            required
-            className="hidden"
-            accept="image/png, image/jpeg"
-          />
-        </label>
-        {errors?.file && (
-          <p className="text-red-700 py-[0.3rem]">{errors.file}</p>
-        )}
-      </div>
 
       <SubmitButton />
     </form>
   );
 };
 
-export default AddProductForm;
+export default ProductUpdateComponent;

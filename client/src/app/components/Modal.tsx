@@ -2,6 +2,7 @@
 import { useAppContext } from "../context/AppContext";
 import AddProducts from "./AddProducts";
 import ProductDeleteComponent from "./ProductDeleteComponent";
+import ProductUpdateComponent from "./ProductUpdateComponent";
 
 const Modal = () => {
   const { showModal, setShowModal } = useAppContext();
@@ -18,7 +19,14 @@ const Modal = () => {
           </section>
         );
       case "editProducts":
-        return <div>Edit Products Component</div>;
+        return (
+          <section className="w-[100%] md:w-[70vw] bg-white px-[1rem] py-[2rem] rounded-[1rem]">
+            <h2 className="text-[#252C32] font-bold  text-[1.15rem] md:text-[1.5rem]">
+              Update Product
+            </h2>
+            <ProductUpdateComponent />
+          </section>
+        );
       case "deleteProducts":
         return <ProductDeleteComponent />;
       default:

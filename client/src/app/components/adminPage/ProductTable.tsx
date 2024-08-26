@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 
 import { getProductsData } from "@/app/action/actions";
 import { useAppContext } from "@/app/context/AppContext";
@@ -16,7 +16,6 @@ const isProductArray = (
 };
 
 const ProductTable = () => {
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const { setShowModal, setDropdownProductId, dropdownProductId } =
     useAppContext();
 
@@ -25,25 +24,7 @@ const ProductTable = () => {
     queryFn: () => getProductsData(),
   });
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      // Check if the click occurred outside of the dropdown
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setDropdownProductId(null);
-      }
-    };
 
-    // Add event listener to handle clicks outside of the dropdown
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      // Cleanup: remove event listener when the component is unmounted
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [setDropdownProductId]);
 
   if (isPending) return "Loading...";
 
@@ -71,9 +52,7 @@ const ProductTable = () => {
     );
   }
 
-  const handleDropdownClick = (event: MouseEvent) => {
-    event.stopPropagation();
-  };
+
 
   const handleClick = (productId: string) => {
     setDropdownProductId(dropdownProductId === productId ? null : productId);
@@ -161,12 +140,13 @@ const ProductTable = () => {
                       {formatDate(data.createdAt)}
                     </p>
                     <div
-                      ref={dropdownRef}
                       className="relative flex justify-end"
                     >
                       <button
                         className="cursor-pointer text-center p-[0.75rem] font-[400] text-[0.875rem] truncate flex justify-center items-center"
-                        onClick={() => handleClick(data._id)}
+                        onClick={(e) => {
+                          handleClick(data._id);
+                        }}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

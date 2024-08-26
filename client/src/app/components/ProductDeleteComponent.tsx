@@ -2,7 +2,6 @@ import React from "react";
 import { useAppContext } from "../context/AppContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { backend_uri } from "./AddProducts";
-import { ExtractedProductData } from "../utils/types";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const ProductDeleteComponent = () => {

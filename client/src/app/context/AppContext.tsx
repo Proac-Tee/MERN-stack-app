@@ -7,10 +7,12 @@ type AppContextProps = {
   showDropdown: boolean;
   dropdownProductId: string | null;
   errors: { [key: string]: string } | null;
+  updateErrors: { [key: string]: string } | null;
   setShowModal: (modalName: string | null) => void;
   setShowDropdown: (dropdownState: boolean) => void;
   setDropdownProductId: (productId: string | null) => void;
   setErrors: (errors: { [key: string]: string } | null) => void;
+  setUpdateErrors: (errors: { [key: string]: string } | null) => void;
 };
 
 // Create the context
@@ -28,6 +30,9 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     null
   );
   const [errors, setErrors] = useState<{ [key: string]: string } | null>(null);
+  const [updateErrors, setUpdateErrors] = useState<{
+    [key: string]: string;
+  } | null>(null);
 
   const appContextValue: AppContextProps = {
     loading,
@@ -39,6 +44,8 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setDropdownProductId,
     errors,
     setErrors,
+    updateErrors,
+    setUpdateErrors,
   };
 
   return (

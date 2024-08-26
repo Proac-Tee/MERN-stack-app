@@ -1,6 +1,6 @@
 "use server";
 
-import { ProductSchema } from "../utils/types";
+import { ProductSchema, UpdateProductSchema } from "../utils/types";
 
 const backend_uri = process.env.BACKEND_URI;
 
@@ -43,6 +43,53 @@ export const addProduct = async (formData: FormData) => {
 
     // Validate the data using Zod
     const result = ProductSchema.safeParse(productData);
+
+    if (!result.success) {
+      let errorMessages: { [key: string]: string } = {};
+
+      // Map validation errors to a more usable format for frontend
+      result.error.issues.forEach((issue) => {
+        const fieldName = issue.path.join(".");
+        errorMessages[fieldName] = issue.message;
+      });
+
+      return {
+        success: false,
+        errors: errorMessages,
+      };
+    }
+
+    return {
+      success: true,
+      message: "Product added successfully!",
+      productData,
+    };
+  } catch (error) {
+    return { success: false, message: "Failed to add product", error };
+  }
+};
+
+export const updateProduct = async (formData: FormData) => {
+  try {
+    // Extract data from FormData
+    const name = formData.get("name")?.toString();
+    const description = formData.get("description")?.toString();
+    const categoryName = formData.get("category")?.toString();
+    const subcategories = formData
+      .getAll("subcategories[]")
+      .map((sub) => ({ name: sub.toString() }));
+
+    const productData = {
+      name,
+      description,
+      category: {
+        name: categoryName,
+        subcategories,
+      },
+    };
+
+    // Validate the data using Zod
+    const result = UpdateProductSchema.safeParse(productData);
 
     if (!result.success) {
       let errorMessages: { [key: string]: string } = {};

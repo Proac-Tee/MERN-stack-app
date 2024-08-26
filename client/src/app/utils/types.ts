@@ -62,3 +62,15 @@ export const ProductSchema = z.object({
   }),
   file: z.any(), // Handling file differently in the server action
 });
+
+// Zod validation schema for the product data
+export const UpdateProductSchema = z.object({
+  name: z.string().min(1, "Product name is required"),
+  description: z.string().min(1, "Product description is required"),
+  category: z.object({
+    name: z.string().min(1, "Category name is required"),
+    subcategories: z
+      .array(z.object({ name: z.string() }))
+      .min(1, "At least one subcategory is required"),
+  }),
+});
