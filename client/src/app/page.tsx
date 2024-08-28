@@ -1,4 +1,5 @@
 import FAQ from "./components/Landingpage/FAQ";
+import Guide from "./components/Landingpage/Guide";
 import Hero from "./components/Landingpage/Hero";
 import Overview from "./components/Landingpage/Overview";
 
@@ -9,6 +10,7 @@ export default function Home() {
         <Hero />
       </div>
       <div className=" bg-white overflow-hidden px-[1rem] md:px-[2rem] xl:px-[5rem]">
+        <Guide />
         <Overview />
         <FAQ />
       </div>

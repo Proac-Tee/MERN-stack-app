@@ -8,10 +8,14 @@ import DOMPurify from "dompurify";
 import { useAppContext } from "../context/AppContext";
 import SubmitButton from "./SubmitButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 export const backend_uri = process.env.NEXT_PUBLIC_BACKEND_URI;
 
 const AddProductForm = () => {
+  const { isAuthenticated, user, isLoading, getAccessTokenRaw } =
+    useKindeBrowserClient();
+
   const { setShowModal, setErrors, errors } = useAppContext();
   const queryClient = useQueryClient();
   const ref = useRef<HTMLFormElement>(null);
@@ -29,11 +33,13 @@ const AddProductForm = () => {
 
   const { mutate } = useMutation({
     mutationFn: async (formData: ExtractedProductData) => {
+      const accessToken = await getAccessTokenRaw();
+
       const response = await fetch(`${backend_uri}/api/product`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          //   Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
 
         body: JSON.stringify(formData),

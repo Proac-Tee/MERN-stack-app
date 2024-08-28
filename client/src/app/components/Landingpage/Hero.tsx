@@ -63,7 +63,7 @@ const Hero: FC = () => {
           </div>
         </div>
         <div
-          className="relative w-[100%] h-[400px] lg:h-[400px] xl:w-[554px] xl:h-[647px] lg:flex-1 
+          className="relative z-0 w-[100%] h-[400px] lg:h-[400px] xl:w-[554px] xl:h-[647px] lg:flex-1 
     "
         >
           <Image

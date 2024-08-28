@@ -5,6 +5,7 @@ type AppContextProps = {
   loading: boolean;
   showModal: string | null;
   showDropdown: boolean;
+  openProfile: boolean;
   dropdownProductId: string | null;
   errors: { [key: string]: string } | null;
   updateErrors: { [key: string]: string } | null;
@@ -13,6 +14,7 @@ type AppContextProps = {
   setDropdownProductId: (productId: string | null) => void;
   setErrors: (errors: { [key: string]: string } | null) => void;
   setUpdateErrors: (errors: { [key: string]: string } | null) => void;
+  setOpenProfile: (profileState: boolean) => void;
 };
 
 // Create the context
@@ -33,6 +35,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [updateErrors, setUpdateErrors] = useState<{
     [key: string]: string;
   } | null>(null);
+  const [openProfile, setOpenProfile] = useState<boolean>(false);
 
   const appContextValue: AppContextProps = {
     loading,
@@ -45,7 +48,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     errors,
     setErrors,
     updateErrors,
-    setUpdateErrors,
+    setUpdateErrors, openProfile, setOpenProfile
   };
 
   return (

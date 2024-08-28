@@ -6,6 +6,7 @@ import {
   getSingleProductDetails,
   updateProduct,
 } from "../controller/controller";
+import authenticateToken from "../auntenticateToken";
 
 const router = Router();
 

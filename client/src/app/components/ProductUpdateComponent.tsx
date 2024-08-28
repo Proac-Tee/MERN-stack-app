@@ -9,13 +9,15 @@ import { initialCategories } from "../utils/intialCategories";
 import DOMPurify from "dompurify";
 import { getProductsData, updateProduct } from "../action/actions";
 import SubmitButton from "./SubmitButton";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 const ProductUpdateComponent = () => {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { setShowDropdown, setShowModal, setUpdateErrors, updateErrors } =
-    useAppContext();
+  const { setShowModal, setUpdateErrors, updateErrors } = useAppContext();
+  const { isAuthenticated, user, isLoading, getAccessTokenRaw } =
+    useKindeBrowserClient();
 
   const ref = useRef<HTMLFormElement>(null);
   const [name, setName] = useState<string>("");
@@ -35,11 +37,13 @@ const ProductUpdateComponent = () => {
   const _id = searchParams.get("_id") || "";
   const { mutate } = useMutation({
     mutationFn: async (extractedData: ExtractedProductData) => {
+      const accessToken = await getAccessTokenRaw();
+
       const response = await fetch(`${backend_uri}/api/product/${_id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          //   Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(extractedData),
       });

@@ -1,15 +1,19 @@
 "use server";
 
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { ProductSchema, UpdateProductSchema } from "../utils/types";
 
 const backend_uri = process.env.BACKEND_URI;
 
 export const getProductsData = async () => {
+  const { getAccessTokenRaw } = getKindeServerSession();
+  const accessToken = await getAccessTokenRaw();
   // Fetch data from the backend server
   const response = await fetch(`${backend_uri}/api/products`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 

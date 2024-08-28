@@ -3,6 +3,7 @@ import { useAppContext } from "../context/AppContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { backend_uri } from "./AddProducts";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 const ProductDeleteComponent = () => {
   const queryClient = useQueryClient();
@@ -10,13 +11,18 @@ const ProductDeleteComponent = () => {
   const router = useRouter();
   const { setShowDropdown, setShowModal } = useAppContext();
 
+  const { isAuthenticated, user, isLoading, getAccessTokenRaw } =
+    useKindeBrowserClient();
+
   const _id = searchParams.get("_id") || "";
   const { mutate } = useMutation({
     mutationFn: async () => {
+      const accessToken = await getAccessTokenRaw();
       const response = await fetch(`${backend_uri}/api/product/${_id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 

@@ -4,12 +4,15 @@ import { connect } from "mongoose";
 import cors from "cors";
 import { router } from "./routes/routes";
 import { errorHandler } from "./middlewares/errorHandler";
+import cookieParser from "cookie-parser";
 
 // Load environment variables from .env file
 dotenv.config();
 
 // Initialize the Express application
 const app: Express = express();
+
+app.use(cookieParser());
 
 // Set the port from environment variables or use a default value
 const PORT = process.env.PORT || 3000;
