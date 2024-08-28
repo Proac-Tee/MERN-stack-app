@@ -18,6 +18,7 @@ const Product: React.FC = () => {
     queryFn: () => getProductsData(),
   });
 
+
   useEffect(() => {
     if (data) {
       filterData();
@@ -50,12 +51,11 @@ const Product: React.FC = () => {
         product.name.toLowerCase().includes(searchQuery)
       );
     }
-
     // Filter by selected subcategories
     if (selectedSubcategories.length > 0) {
       filteredProducts = filteredProducts.filter((product: IProduct) =>
-        selectedSubcategories.includes(
-          product.category.subcategories.find((sub) => sub.selected)?.name || ""
+        product.category.subcategories.some((sub) =>
+          selectedSubcategories.includes(sub.name)
         )
       );
     }

@@ -65,9 +65,11 @@ const ProductDetails = ({ params }: { params: { id: string } }) => {
     <section className="max-w-[1440px] w-[100%] min-h-[100vh] mx-auto px-4">
       <section className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4 h-full mt-5 xl:mt-8 pb-10 bg-gray-100 p-4 min-h-[300px]">
         <section className="h-full">
-          <h3 className=" text-xl font-bold mb-6 underline underline-offset-4 decoration-[1px]">
-            Featured Products
-          </h3>
+          {otherProducts && (
+            <h3 className=" text-xl font-bold mb-6 underline underline-offset-4 decoration-[1px]">
+              Featured Products
+            </h3>
+          )}
 
           <section className="flex flex-col gap-2">
             {otherProducts?.map((product: IProduct) => (

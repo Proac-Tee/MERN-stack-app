@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { getProductsData } from "@/app/action/actions";
 import { useAppContext } from "@/app/context/AppContext";
@@ -7,6 +7,10 @@ import AdminDashboardDropdown from "@/app/utils/AdminDashboardDropdown";
 import { formatDate } from "@/app/utils/formatDate";
 import { IError, IProduct } from "@/app/utils/types";
 import { useQuery } from "@tanstack/react-query";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import AdminFilter from "./AdminFilter";
+import { useRouter, useSearchParams } from "next/navigation";
+import { calculateStartDate } from "@/app/utils/calculateStartDate";
 
 // Type guard to check if products is an array of IProduct
 const isProductArray = (
@@ -16,6 +20,11 @@ const isProductArray = (
 };
 
 const ProductTable = () => {
+  const { isAuthenticated, user, isLoading } = useKindeBrowserClient();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [filteredDatas, setFilteredData] = useState<IProduct[]>([]);
+
   const { setShowModal, setDropdownProductId, dropdownProductId } =
     useAppContext();
 
@@ -24,7 +33,47 @@ const ProductTable = () => {
     queryFn: () => getProductsData(),
   });
 
+  useEffect(() => {
+    if (data) {
+      filterData();
+    }
+  }, [data, searchParams]);
 
+  const filterData = () => {
+    let filteredProducts = data;
+
+    const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+    const selectedCategory = searchParams.get("category");
+    const dateRange = searchParams.get("duration");
+
+    // Filter by search query (matches product name)
+    if (searchQuery) {
+      filteredProducts = filteredProducts.filter((product: IProduct) =>
+        product.name.toLowerCase().includes(searchQuery)
+      );
+    }
+
+    // Filter by selected category
+    if (selectedCategory) {
+      filteredProducts = filteredProducts.filter(
+        (product: IProduct) => product.category.name === selectedCategory
+      );
+    }
+
+    // Filter by date range
+    if (dateRange) {
+      const startDate = calculateStartDate(dateRange);
+
+      if (startDate) {
+        filteredProducts = filteredProducts.filter((product: IProduct) => {
+          const productDate = new Date(product.createdAt);
+          return productDate >= startDate;
+        });
+      }
+    }
+
+    setFilteredData(filteredProducts);
+  };
 
   if (isPending) return "Loading...";
 
@@ -52,8 +101,6 @@ const ProductTable = () => {
     );
   }
 
-
-
   const handleClick = (productId: string) => {
     setDropdownProductId(dropdownProductId === productId ? null : productId);
   };
@@ -62,9 +109,20 @@ const ProductTable = () => {
     return (
       <section className="py-[2.5rem]">
         <div className="flex justify-between flex-wrap gap-[2rem]">
-          <h2 className="text-[#252C32] font-bold  text-[1.75rem] md:text-[2.25rem]">
-            Dashboard
-          </h2>
+          {isLoading && <p className="text-[0.75rem">Loading..</p>}
+          {!isLoading && (
+            <>
+              {user ? (
+                <h2 className="text-[#252C32] font-bold  text-[1.75rem] md:text-[2.25rem]">
+                  Hi!, {user.given_name}
+                </h2>
+              ) : (
+                <h2 className="text-[#252C32] font-bold  text-[1.75rem] md:text-[2.25rem]">
+                  Dashboard
+                </h2>
+              )}
+            </>
+          )}
           <button
             onClick={() => setShowModal("addProducts")}
             className="w-[160px] h-[32px] rounded-[6px] py-[4px] pl-[8px] pr-[12px] flex justify-center items-center gap-[0.5rem] bg-primary_color text-white font-semibold leading-[1.5rem] text-[0.875rem] hover:brightness-75"
@@ -86,10 +144,11 @@ const ProductTable = () => {
             Add Product
           </button>
         </div>
+
         <section className="my-[2rem]">
-          <h3 className="pb-[0.5rem] font-semibold text-[0.875rem]text-[#252C32]">
-            Product
-          </h3>
+          <section className="pb-[2rem]">
+            <AdminFilter />
+          </section>
           <section className="overflow-x-scroll overflow-y-hidden no-scrollbar pb-[6rem] z-10 ">
             <div className="relative w-[1196px] md:w-[100%] h-auto border-[1px] mb-[1rem] z-10 border-[#1C1C1C1A] rounded-[0.75rem] ">
               <div className="h-[40px] table-grid">
@@ -108,7 +167,7 @@ const ProductTable = () => {
                 <p className="text-[#84919A] font-semibold text-[0.75rem] leading-[1rem] text-center p-[0.75rem]  truncate"></p>
               </div>
               <div className="relative">
-                {data.map((data) => (
+                {filteredDatas.map((data) => (
                   <div
                     key={data._id}
                     className=" border-t-[1px] border-t-[#1C1C1C1A] table-grid"
@@ -139,9 +198,7 @@ const ProductTable = () => {
                       </span>
                       {formatDate(data.createdAt)}
                     </p>
-                    <div
-                      className="relative flex justify-end"
-                    >
+                    <div className="relative flex justify-end">
                       <button
                         className="cursor-pointer text-center p-[0.75rem] font-[400] text-[0.875rem] truncate flex justify-center items-center"
                         onClick={(e) => {
