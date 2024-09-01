@@ -118,49 +118,49 @@ const ProductDetails = ({ params }: { params: { id: string } }) => {
   return (
     <section className="max-w-[1440px] w-[100%] min-h-[100vh] mx-auto px-4">
       <section className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4 h-full mt-5 xl:mt-8 pb-10 bg-gray-100 p-4 min-h-[100vh]">
-        <section className="h-full">
+        <section className="h-full w-[100%]">
           {otherProducts && (
             <h3 className=" text-xl font-bold mb-6 underline underline-offset-4 decoration-[1px]">
               Featured Products
             </h3>
           )}
 
-          <section className="flex flex-col gap-2">
+          <section className="flex flex-col  gap-2 w-[100%]">
             {otherProducts?.map((product: IProduct) => (
               <div
                 key={product._id}
-                className="flex items-center gap-4 border-b-[1px] border-b-gray-300 py-2 cursor-pointer"
+                className="flex items-center w-[100%] gap-4 border-b-[1px] border-b-gray-300 py-2 cursor-pointer"
                 onClick={() => handleOtherProductDetailsRoute(product._id)}
               >
-                <div className="relative w-[95.99px] h-[95.99px] bg-gray-200">
-                  {fetchedFile && fetchedFile.length > 0 && (
-                    <ul>
-                      {fetchedFile
-                        .filter((file) => {
-                          // Split the file name and remove the extension
-                          const fileNameWithoutExtension = file.name
-                            .split(".")
-                            .slice(0, -1)
-                            .join(".");
-                          // Check if the name without the extension matches the product ID
-                          return fileNameWithoutExtension === product._id;
-                        })
-                        .map((file: FileType) => (
-                          <Image
-                            key={file.id}
-                            quality={100}
-                            sizes="(min-width: 768px) 100vw, 300px"
-                            src={`https://utfs.io/f/${file.key}`}
-                            alt="Product image"
-                            fill
-                          />
-                        ))}
-                    </ul>
-                  )}
-                </div>
-                <div className="flex flex-col gap-2 font-semibold">
-                  <h5 className="text-base font-medium">{product.name}</h5>
-                  <p className="text-sm font-semibold">
+                {fetchedFile && fetchedFile.length > 0 && (
+                  <div className="relative min-w-[95.99px] w-[95.99px] h-[95.99px] bg-gray-200">
+                    {fetchedFile
+                      .filter((file) => {
+                        // Split the file name and remove the extension
+                        const fileNameWithoutExtension = file.name
+                          .split(".")
+                          .slice(0, -1)
+                          .join(".");
+                        // Check if the name without the extension matches the product ID
+                        return fileNameWithoutExtension === product._id;
+                      })
+                      .map((file: FileType) => (
+                        <Image
+                          key={file.id}
+                          quality={100}
+                          sizes="(min-width: 768px) 100vw, 300px"
+                          src={`https://utfs.io/f/${file.key}`}
+                          alt="Product image"
+                          fill
+                        />
+                      ))}
+                  </div>
+                )}
+                <div className="flex flex-col overflow-hidden gap-2 font-semibold">
+                  <h5 className="text-base font-medium truncate">
+                    {product.name}
+                  </h5>
+                  <p className="text-sm font-semibold truncate">
                     {product.category.name}
                   </p>
                 </div>
@@ -170,7 +170,7 @@ const ProductDetails = ({ params }: { params: { id: string } }) => {
         </section>
         <section className="relative h-[400px] xl:col-span-2 bg-gray-200">
           {fetchedFile && fetchedFile.length > 0 && (
-            <ul>
+            <>
               {fetchedFile
                 .filter((file) => {
                   // Split the file name and remove the extension
@@ -191,10 +191,10 @@ const ProductDetails = ({ params }: { params: { id: string } }) => {
                     fill
                   />
                 ))}
-            </ul>
+            </>
           )}
         </section>
-        <section className="h-full w-full md:col-span-2 xl:col-span-3 xl:p-14 flex flex-col gap-6 justify-center">
+        <section className="h-full w-full md:col-span-2 xl:col-span-3 xl:px-14 xl:py-[1rem] flex flex-col gap-6">
           <div className="flex flex-col gap-5">
             <h2 className="text-4xl font-semibold">
               {capitalizeFirstLetter(product.name)}
