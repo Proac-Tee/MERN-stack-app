@@ -26,7 +26,7 @@ const ProductSearchHeader = () => {
     <section className=" w-full bg-[#F5F5F3] relative">
       <section className="max-w-[1440px] mx-auto">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full px-4 pb-4 lg:pb-0 h-full lg:h-24">
-          <div className="flex h-14 cursor-pointer items-center gap-2 text-primary_black">
+          <div className="flex h-14 cursor-pointer items-center gap-2 text-primary_black md:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -41,8 +41,9 @@ const ProductSearchHeader = () => {
                 d="M3.75 9h16.5m-16.5 6.75h16.5"
               />
             </svg>
-            <p className="text-[14px] font-normal">Browse by category</p>
+            <p className="text-[14px] font-normal">Filter</p>
           </div>
+          <div className="md:flex h-14 cursor-pointer items-center gap-2 text-primary_black hidden"></div>
           <div className="relative w-full lg:w-[600px] h-[50px] text-base text-primeColor bg-white flex items-center gap-2 justify-between px-6 rounded-xl">
             <input
               type="search"
