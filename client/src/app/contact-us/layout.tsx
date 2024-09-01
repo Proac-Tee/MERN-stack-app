@@ -4,9 +4,9 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 const plus_Jakarta_Sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "About us",
-  description: "About us",
-  keywords: "About us",
+  title: "Contact us",
+  description: "Contact us",
+  keywords: "Contact us",
 };
 
 export default function ContactUsLayout({

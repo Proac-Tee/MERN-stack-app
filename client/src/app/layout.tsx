@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Providers from "./utils/Provider";
 import Modal from "./components/Modal";
 import { AppProvider } from "./context/AppContext";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Zhen Groups",
@@ -23,6 +24,7 @@ export default function RootLayout({
           <Providers>
             <Header />
             <Modal />
+            <Toaster position="top-center" />
             {children}
             <Footer />
           </Providers>

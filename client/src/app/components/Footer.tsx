@@ -65,8 +65,9 @@ const Footer: FC = () => {
             <ul className="flex items-center justify-center space-x-8 xl:justify-end">
               <li>
                 <a
-                  href="#"
-                  title=""
+                  href="https://twitter.com/zhengroup"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="block text-white transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   <svg
@@ -85,8 +86,9 @@ const Footer: FC = () => {
 
               <li>
                 <a
-                  href="#"
-                  title=""
+                  href="https://www.instagram.com/zhen_group"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="block text-white transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   <svg

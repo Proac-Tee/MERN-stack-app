@@ -89,3 +89,42 @@ export type FilesArrayType = {
   files: FileType[]; // Array of file objects
   hasMore: boolean; // hasMore is a boolean indicating if there are more files
 };
+
+export interface contactUsErrors {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  messageContent?: string;
+}
+
+export const contactUsSchema = z.object({
+  firstName: z
+    .string()
+    .min(1, {
+      message: "first name must be at least 1 characters long.",
+    })
+    .max(100, {
+      message: "first name must be at most 100 characters long.",
+    }),
+
+  lastName: z
+    .string()
+    .min(1, {
+      message: "last name must be at least 1 characters long.",
+    })
+    .max(100, {
+      message: "last name must be at most 100 characters long.",
+    }),
+  email: z.string().email({
+    message: "Please enter a valid email.",
+  }),
+
+  messageContent: z
+    .string()
+    .min(30, {
+      message: "content must be at least 30 characters long.",
+    })
+    .max(1000, {
+      message: "content must be at most 1000 characters long.",
+    }),
+});

@@ -78,7 +78,6 @@ const HeaderDropdown = () => {
             onClick={profileHandler}
             className="h-[40px] cursor-pointer rounded-b-[0.5rem]  hover:bg-gray-100 transition-all duration-300 ease-in-out px-[1rem] py-[0.625rem] flex gap-[1.3rem] text-[0.875rem] items-center"
           >
-            {" "}
             <span>
               <svg
                 width="18"

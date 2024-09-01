@@ -12,12 +12,12 @@ const Overview: FC = () => {
     <section>
       <article className="flex flex-col justify-center items-center gap-[1rem] max-w-[616px] mx-auto py-[3rem]">
         <h2
-          className={`text-[#18181B] leading-[2rem] md:leading-[3rem]  font-bold text-[1.625rem] md:text-[2.625rem] text-center ${plus_Jakarta_Sans.className}`}
+          className={`text-primary_black leading-[2rem] md:leading-[3rem]  font-bold text-[1.625rem] md:text-[2.625rem] text-center ${plus_Jakarta_Sans.className}`}
         >
           Make every step user-centric
         </h2>
         <p
-          className={`text-[#52525b] font-[400] text-[0.975rem] md:text-[1.125rem] leading-[1rem] md:leading-[1.75rem] text-center ${plus_Jakarta_Sans.className}`}
+          className={`text-primary_black font-[400] text-[0.975rem] md:text-[1.125rem] leading-[1rem] md:leading-[1.75rem] text-center ${plus_Jakarta_Sans.className}`}
         >
           Connecting the World, One Delivery at a Time
         </p>
@@ -46,12 +46,12 @@ const Overview: FC = () => {
                 </svg>
               </div>
               <h3
-                className={`text-[1rem] md:text-[1.3125rem] text-[#18181B] font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
+                className={`text-[1rem] md:text-[1.3125rem] text-primary_black font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
               >
                 Global Sourcing
               </h3>
               <p
-                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-[#52525b] font-[400] ${plus_Jakarta_Sans.className}`}
+                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-primary_black font-[400] ${plus_Jakarta_Sans.className}`}
               >
                 Sourcing high-quality products from trusted suppliers worldwide.
               </p>
@@ -69,12 +69,12 @@ const Overview: FC = () => {
                 />
               </div>
               <h3
-                className={`text-[1rem] md:text-[1.3125rem] text-[#18181B] font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
+                className={`text-[1rem] md:text-[1.3125rem] text-primary_black font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
               >
                 Efficient Logistics
               </h3>
               <p
-                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-[#52525b] font-[400] ${plus_Jakarta_Sans.className}`}
+                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-primary_black font-[400] ${plus_Jakarta_Sans.className}`}
               >
                 Timely, cost-effective deliveries with transparent tracking and
                 inventory management.
@@ -93,12 +93,12 @@ const Overview: FC = () => {
                 />
               </div>
               <h3
-                className={`text-[1rem] md:text-[1.3125rem] text-[#18181B] font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
+                className={`text-[1rem] md:text-[1.3125rem] text-primary_black font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
               >
                 Customer-Centric
               </h3>
               <p
-                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-[#52525b] font-[400] ${plus_Jakarta_Sans.className}`}
+                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-primary_black font-[400] ${plus_Jakarta_Sans.className}`}
               >
                 Tailored solutions, flexible orders, and dedicated support for
                 every partner.
@@ -117,12 +117,12 @@ const Overview: FC = () => {
                 />
               </div>
               <h3
-                className={`text-[1rem] md:text-[1.3125rem] text-[#18181B] font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
+                className={`text-[1rem] md:text-[1.3125rem] text-primary_black font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
               >
                 Sustainability Practices
               </h3>
               <p
-                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-[#52525b] font-[400] ${plus_Jakarta_Sans.className}`}
+                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-primary_black font-[400] ${plus_Jakarta_Sans.className}`}
               >
                 Minimizing environmental impact through reduced packaging and
                 optimized transport.
@@ -151,12 +151,12 @@ const Overview: FC = () => {
                 </svg>
               </div>
               <h3
-                className={`text-[1rem] md:text-[1.3125rem] text-[#18181B] font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
+                className={`text-[1rem] md:text-[1.3125rem] text-primary_black font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
               >
                 Technology Integration
               </h3>
               <p
-                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-[#52525b] font-[400] ${plus_Jakarta_Sans.className}`}
+                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-primary_black font-[400] ${plus_Jakarta_Sans.className}`}
               >
                 Leveraging advanced technology for seamless order processing and
                 real-time updates.
@@ -183,12 +183,12 @@ const Overview: FC = () => {
                 </svg>
               </div>
               <h3
-                className={`text-[1rem] md:text-[1.3125rem] text-[#18181B] font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
+                className={`text-[1rem] md:text-[1.3125rem] text-primary_black font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
               >
                 Quality Assurance
               </h3>
               <p
-                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-[#52525b] font-[400] ${plus_Jakarta_Sans.className}`}
+                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-primary_black font-[400] ${plus_Jakarta_Sans.className}`}
               >
                 Strict quality control ensures compliance with international
                 standards.
@@ -215,12 +215,12 @@ const Overview: FC = () => {
                 </svg>
               </div>
               <h3
-                className={`text-[1rem] md:text-[1.3125rem] text-[#18181B] font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
+                className={`text-[1rem] md:text-[1.3125rem] text-primary_black font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
               >
                 Strategic Partnerships
               </h3>
               <p
-                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-[#52525b] font-[400] ${plus_Jakarta_Sans.className}`}
+                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-primary_black font-[400] ${plus_Jakarta_Sans.className}`}
               >
                 Collaborating with industry leaders to expand our product
                 offerings and services.
@@ -244,12 +244,12 @@ const Overview: FC = () => {
                 </svg>
               </div>
               <h3
-                className={`text-[1rem] md:text-[1.3125rem] text-[#18181B] font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
+                className={`text-[1rem] md:text-[1.3125rem] text-primary_black font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
               >
                 Market Insights
               </h3>
               <p
-                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-[#52525b] font-[400] ${plus_Jakarta_Sans.className}`}
+                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-primary_black font-[400] ${plus_Jakarta_Sans.className}`}
               >
                 Providing data-driven insights to help partners make informed
                 decisions and stay ahead of industry trends.
@@ -278,12 +278,12 @@ const Overview: FC = () => {
                 </svg>
               </div>
               <h3
-                className={`text-[1rem] md:text-[1.3125rem] text-[#18181B] font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
+                className={`text-[1rem] md:text-[1.3125rem] text-primary_black font-bold leading-[1.75rem] ${plus_Jakarta_Sans.className}`}
               >
                 End-to-End Support
               </h3>
               <p
-                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-[#52525b] font-[400] ${plus_Jakarta_Sans.className}`}
+                className={`text-[0.875rem] md:text-[1rem]  leading-[18px] md:leading-[26px] text-primary_black font-[400] ${plus_Jakarta_Sans.className}`}
               >
                 Offering comprehensive support, from sourcing to delivery,
                 ensuring a smooth and efficient experience at every stage.
