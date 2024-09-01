@@ -78,7 +78,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         className="max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
       >
         <div
-          className={`pb-[2rem] text-[1rem] font-[400] text-[#667085] ${plus_Jakarta_Sans.className}`}
+          className={`pb-[2rem] text-[1rem] font-[400] text-white ${plus_Jakarta_Sans.className}`}
         >
           {answer}
         </div>

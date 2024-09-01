@@ -48,12 +48,12 @@ const FAQ: FC = () => {
     <section>
       <div className="flex flex-col gap-[0.5rem] pt-[1rem] md:pt-[6rem]">
         <h3
-          className={`text-[#18181B] leading-[1.75rem] md:leading-[2.75rem] font-semibold text-[1.25rem] md:text-[2.25rem] text-center ${plus_Jakarta_Sans.className}`}
+          className={`text-white leading-[1.75rem] md:leading-[2.75rem] font-semibold text-[1.25rem] md:text-[2.25rem] text-center ${plus_Jakarta_Sans.className}`}
         >
           Frequently asked questions
         </h3>
         <p
-          className={`text-[#52525b] text-center text-[0.875rem] md:text-[1.25rem] ${plus_Jakarta_Sans.className}`}
+          className={`text-black text-center text-[0.875rem] md:text-[1.25rem] ${plus_Jakarta_Sans.className}`}
         >
           What you need to know
         </p>

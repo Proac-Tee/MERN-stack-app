@@ -2,8 +2,7 @@
 
 import React, { FC } from "react";
 import { plus_Jakarta_Sans } from "../utils/fonts";
-import zhen_logo from "../../assets/ZHENArtboard 1 copy@3x.png";
-import twitter_x from "../../assets/twitter.svg";
+
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,7 +18,7 @@ const Footer: FC = () => {
   };
   return (
     <section
-      className={`py-12 bg-gradient-to-r from-fuchsia-600 to-blue-600   ${plus_Jakarta_Sans.className}`}
+      className={`py-12 bg-gradient-to-r from-gray-700 via-gray-900 to-black   ${plus_Jakarta_Sans.className}`}
     >
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div className="text-center xl:flex xl:items-center xl:justify-between xl:text-left">
@@ -27,7 +26,7 @@ const Footer: FC = () => {
             {/* <img className="w-auto mx-auto h-7" src="https://cdn.rareblocks.xyz/collection/celebration/images/logo-alt-2.svg" alt="" /> */}
 
             <p className="mt-5 text-sm text-white xl:ml-6 xl:mt-0">
-              &copy; Copyright Zhen group {new Date().getFullYear()}
+              &copy; Copyright, Zhen group {new Date().getFullYear()}
             </p>
           </div>
 
@@ -35,7 +34,11 @@ const Footer: FC = () => {
             <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 xl:justify-end">
               <li>
                 <Link
-                  className="text-sm text-white transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className={`text-sm hover:text-primary_color  transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80 ${
+                    pathname === "/products"
+                      ? "text-primary_color"
+                      : "text-white"
+                  }`}
                   href={`/products`}
                 >
                   Products
@@ -43,7 +46,11 @@ const Footer: FC = () => {
               </li>
               <li>
                 <Link
-                  className="text-sm text-white transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className={`text-sm hover:text-primary_color  transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80 ${
+                    pathname === "/about-us"
+                      ? "text-primary_color"
+                      : "text-white"
+                  }`}
                   href={`/about-us`}
                 >
                   About
@@ -52,7 +59,11 @@ const Footer: FC = () => {
 
               <li>
                 <Link
-                  className="text-sm text-white transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className={`text-sm hover:text-primary_color  transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80 ${
+                    pathname === "/contact-us"
+                      ? "text-primary_color"
+                      : "text-white"
+                  }`}
                   href={`/contact-us`}
                 >
                   Contact us
@@ -71,7 +82,7 @@ const Footer: FC = () => {
                   className="block text-white transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   <svg
-                    className="w-5 h-5 text-gray-800 dark:text-white"
+                    className="w-5 h-5 text-white dark:text-white"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -106,7 +117,7 @@ const Footer: FC = () => {
               <li>
                 <button
                   onClick={handleScrollToTop}
-                  className=" cursor-pointer py-[0.5rem] px-[0.3rem] rounded-[0.5rem] text-white border-x-primary_black bg-primary_black "
+                  className=" cursor-pointer py-[0.5rem] px-[0.3rem] rounded-[0.5rem] text-white border-x-primary_black bg-primary_color "
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
