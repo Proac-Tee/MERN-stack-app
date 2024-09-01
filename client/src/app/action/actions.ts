@@ -2,12 +2,16 @@
 
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { ProductSchema, UpdateProductSchema } from "../utils/types";
+import { UTApi } from "uploadthing/server";
+
+const utapi = new UTApi();
 
 const backend_uri = process.env.BACKEND_URI;
 
 export const getProductsData = async () => {
   const { getAccessTokenRaw } = getKindeServerSession();
   const accessToken = await getAccessTokenRaw();
+
   // Fetch data from the backend server
   const response = await fetch(`${backend_uri}/api/products`, {
     method: "GET",
@@ -22,6 +26,13 @@ export const getProductsData = async () => {
 
   // Return the fetched data
   return data;
+};
+
+export const getProductsFiles = async () => {
+  const response = await utapi.listFiles();
+  // Ensure that the response is a plain object or array
+  const plainResponse = JSON.parse(JSON.stringify(response)); // This removes any class instances or prototypes
+  return plainResponse;
 };
 
 export const addProduct = async (formData: FormData) => {
@@ -117,5 +128,35 @@ export const updateProduct = async (formData: FormData) => {
     };
   } catch (error) {
     return { success: false, message: "Failed to add product", error };
+  }
+};
+
+export const deteteProductData = async (_id: string, fileKey: string) => {
+  const { getAccessTokenRaw } = getKindeServerSession();
+  const accessToken = await getAccessTokenRaw();
+
+  try {
+    // Fetch data from the backend server
+    const response = await fetch(`${backend_uri}/api/product/${_id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    // Ensure that the response is a plain object or array
+    const data = JSON.parse(JSON.stringify(response)); // This removes any class instances or prototypes
+
+    await utapi.deleteFiles(fileKey);
+
+    console.log(data);
+
+    return {
+      success: true,
+      message: "Product deleted successfully!",
+    };
+  } catch (error) {
+    return { success: false, message: "Failed to delete product", error };
   }
 };

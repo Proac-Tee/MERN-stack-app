@@ -69,9 +69,11 @@ const Hero: FC = () => {
           <Image
             quality={100}
             fill
+            priority
             sizes="(min-width: 768px) 100vw, 700px"
             src={hero_image}
             alt="hero image"
+            
           />
         </div>
       </section>

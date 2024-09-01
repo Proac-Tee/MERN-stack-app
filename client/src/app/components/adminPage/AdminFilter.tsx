@@ -235,7 +235,7 @@ const AdminFilter = () => {
             </p>
           </div>
           <div
-            className={`absolute top-[3rem] category-dropdown left-0 bg-white border-[#F2F4F7] border-[1px] rounded-[0.5rem] z-20  py-2 w-[150px] md:w-[240px] max-h-[250px] overflow-x-hidden overflow-y-auto dropdown-scroll text-[1rem] text-[#494949]  ${
+            className={`absolute top-[3rem] category-dropdown right-0 bg-white border-[#F2F4F7] border-[1px] rounded-[0.5rem] z-20  py-2 w-[150px] md:w-[240px] max-h-[250px] overflow-x-hidden overflow-y-auto dropdown-scroll text-[1rem] text-[#494949]  ${
               toggleCategory ? "block" : "hidden"
             } `}
           >
@@ -310,7 +310,7 @@ const AdminFilter = () => {
             </p>
           </div>
           <div
-            className={`absolute top-[3rem] duration-dropdown left-0 bg-white border-[#F2F4F7] border-[1px] rounded-[0.5rem] z-20  py-2 w-[150px] md:w-[240px] max-h-[250px] overflow-x-hidden overflow-y-auto dropdown-scroll text-[1rem] text-[#494949] ${
+            className={`absolute top-[3rem] duration-dropdown right-0 bg-white border-[#F2F4F7] border-[1px] rounded-[0.5rem] z-20  py-2 w-[150px] md:w-[240px] max-h-[250px] overflow-x-hidden overflow-y-auto dropdown-scroll text-[1rem] text-[#494949] ${
               toggleDuration ? "block" : "hidden"
             } `}
           >

@@ -3,24 +3,23 @@
 import React, { useEffect, useState } from "react";
 import SideNav from "./SideNav";
 import ProductGrid from "@/app/utils/ProductGrid";
-import { useQuery } from "@tanstack/react-query";
-import { getProductsData } from "@/app/action/actions";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { initialCategories } from "@/app/utils/intialCategories";
 import { ICategory, IProduct } from "@/app/utils/types";
+import Image from "next/image";
+import loading_image from "../../../assets/loading.svg";
+import { productOptions } from "@/app/utils/products";
 
 const Product: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [filteredData, setFilteredData] = useState<IProduct[]>([]);
-  const { data, isPending, error } = useQuery({
-    queryKey: ["productsData"],
-    queryFn: () => getProductsData(),
-  });
 
+  const { data, isPending, error } = useSuspenseQuery(productOptions);
 
   useEffect(() => {
-    if (data) {
+    if (data && data.length > 0) {
       filterData();
     }
   }, [data, searchParams]);
@@ -63,12 +62,51 @@ const Product: React.FC = () => {
     setFilteredData(filteredProducts);
   };
 
-  if (isPending) return "Loading...";
+  if (isPending)
+    return (
+      <div className="w-[100%] flex justify-center items-center max-w-[1440px] mx-auto p-4 ">
+        <Image
+          quality={100}
+          sizes="(min-width: 768px) 100vw, 700px"
+          src={loading_image}
+          alt="hero image"
+          className="w-8 h-8"
+        />
+      </div>
+    );
 
-  if (error) return "An error has occurred: " + error.message;
+  if (error) {
+    return (
+      <section className="w-full flex justify-center items-center min-h-[300px]">
+        <div className="text-center text-red-500">
+          <h2 className="text-2xl font-bold">Error</h2>
+          <p className="text-lg">{data.message}</p>
+        </div>
+      </section>
+    );
+  }
+
+  if ("status" in data && data.status === "error") {
+    return (
+      <section className="w-full flex justify-center items-center min-h-[300px]">
+        <div className="text-center text-red-500">
+          <h2 className="text-2xl font-bold">Error</h2>
+          <p className="text-lg">{data.message}</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="w-[100%] flex justify-center items-center max-w-[1440px] mx-auto p-4 min-h-[40vh]">
+        <p>No product data found</p>
+      </div>
+    );
+  }
 
   return (
-    <section className="max-w-[1440px] mx-auto p-4 ">
+    <section className="max-w-[1440px] mx-auto p-4 my-[2.5rem]">
       <div className="w-full py-10 xl:py-10 flex flex-col gap-3">
         <h1 className="text-5xl text-primary_black font-titleFont font-bold">
           Products

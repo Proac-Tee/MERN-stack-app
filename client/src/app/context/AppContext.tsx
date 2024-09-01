@@ -1,5 +1,6 @@
 "use client";
 import { createContext, ReactNode, useContext, useState } from "react";
+import { FileType } from "../utils/types";
 
 type AppContextProps = {
   loading: boolean;
@@ -9,6 +10,8 @@ type AppContextProps = {
   dropdownProductId: string | null;
   errors: { [key: string]: string } | null;
   updateErrors: { [key: string]: string } | null;
+  file: File | null;
+  setFile: (fileToUpload: File | null) => any;
   setShowModal: (modalName: string | null) => void;
   setShowDropdown: (dropdownState: boolean) => void;
   setDropdownProductId: (productId: string | null) => void;
@@ -31,6 +34,8 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [dropdownProductId, setDropdownProductId] = useState<string | null>(
     null
   );
+  const [file, setFile] = useState<File | null>(null);
+
   const [errors, setErrors] = useState<{ [key: string]: string } | null>(null);
   const [updateErrors, setUpdateErrors] = useState<{
     [key: string]: string;
@@ -48,7 +53,11 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     errors,
     setErrors,
     updateErrors,
-    setUpdateErrors, openProfile, setOpenProfile
+    setUpdateErrors,
+    openProfile,
+    setOpenProfile,
+    file,
+    setFile,
   };
 
   return (

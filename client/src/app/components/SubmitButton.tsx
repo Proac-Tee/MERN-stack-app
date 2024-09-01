@@ -5,7 +5,13 @@ import React from "react";
 import { useFormStatus } from "react-dom";
 import loading_image from "../../assets/loading.svg";
 
-const SubmitButton = () => {
+// Define the prop types
+interface SubmitButtonProps {
+  isPending: boolean;
+  text: string;
+}
+
+const SubmitButton: React.FC<SubmitButtonProps> = ({ isPending, text }) => {
   const { pending } = useFormStatus();
 
   return (
@@ -13,7 +19,7 @@ const SubmitButton = () => {
       disabled={pending}
       className="w-[160px] h-[32px] rounded-[6px] py-[4px] pl-[8px] pr-[12px] flex justify-center items-center gap-[0.5rem] bg-primary_color text-white font-semibold leading-[1.5rem] text-[0.875rem] hover:brightness-75"
     >
-      {pending ? (
+      {pending || isPending ? (
         <span className="w-[18px] h-[18px]">
           <Image
             quality={70}
@@ -24,7 +30,7 @@ const SubmitButton = () => {
           />
         </span>
       ) : (
-        "Add product"
+        text
       )}
     </button>
   );

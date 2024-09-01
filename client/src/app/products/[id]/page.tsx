@@ -1,11 +1,13 @@
 "use client";
-import { getProductsData } from "@/app/action/actions";
-import { useQuery } from "@tanstack/react-query";
+import { getProductsFiles } from "@/app/action/actions";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
-import x from "../../../assets/ZHENArtboard 1 copy@3x.png";
-
+import { FilesArrayType, FileType } from "@/app/utils/types";
+import loading_image from "../../../assets/loading.svg";
+import { capitalizeFirstLetter } from "@/app/utils/capitalizeFirstLetter";
+import { productOptions } from "@/app/utils/products";
 interface ISubcategory {
   name: string;
   selected: boolean; // Indicates if the subcategory is selected or not.
@@ -30,22 +32,74 @@ const ProductDetails = ({ params }: { params: { id: string } }) => {
   const productId = params.id;
   const router = useRouter();
 
-  // Fetch products data
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["productsData"],
-    queryFn: () => getProductsData(),
+  // Fetch files data
+  const {
+    data: fetchedFile,
+    isLoading: filesLoading,
+    error: filesError,
+  } = useQuery({
+    queryKey: ["files"],
+    queryFn: async () => {
+      const response = await getProductsFiles();
+      const data: FilesArrayType = await response;
+
+      return data.files; // Assume the response has a 'files' array
+    },
   });
 
-  if (isLoading) return "Loading...";
+  // Fetch products data
+  const { data, isPending, error } = useSuspenseQuery(productOptions);
 
-  if (error) return "An error has occurred: " + (error as Error).message;
+  if (isPending || filesLoading)
+    return (
+      <section className="min-h-[100vh]">
+        <div className="w-[100%] flex justify-center items-center max-w-[1440px] mx-auto p-4 ">
+          <Image
+            quality={100}
+            sizes="(min-width: 768px) 100vw, 700px"
+            src={loading_image}
+            alt="hero image"
+            className="w-8 h-8"
+          />
+        </div>
+      </section>
+    );
+
+  if (error) {
+    return (
+      <section className="w-full flex justify-center items-center min-h-[100vh]">
+        <div className="text-center text-red-500">
+          <h2 className="text-2xl font-bold">Error</h2>
+          <p className="text-lg">{(error as Error).message}</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (filesError) {
+    return (
+      <section className="w-full flex justify-center items-center min-h-[100vh]">
+        <div className="text-center text-red-500">
+          <h2 className="text-2xl font-bold">Error</h2>
+          <p className="text-lg">{filesError.message}</p>
+        </div>
+      </section>
+    );
+  }
 
   // Find the specific product by its ID
   const product = data?.find((product: IProduct) => product._id === productId);
 
   // If product is not found
   if (!product) {
-    return <div>Product not found.</div>;
+    return (
+      <section className="w-full flex justify-center items-center min-h-[100vh]">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold">No Products Found</h2>
+          <p className="text-lg">Please try again later.</p>
+        </div>
+      </section>
+    );
   }
 
   // Filter out the main product and randomly select three other products
@@ -63,7 +117,7 @@ const ProductDetails = ({ params }: { params: { id: string } }) => {
 
   return (
     <section className="max-w-[1440px] w-[100%] min-h-[100vh] mx-auto px-4">
-      <section className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4 h-full mt-5 xl:mt-8 pb-10 bg-gray-100 p-4 min-h-[300px]">
+      <section className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4 h-full mt-5 xl:mt-8 pb-10 bg-gray-100 p-4 min-h-[100vh]">
         <section className="h-full">
           {otherProducts && (
             <h3 className=" text-xl font-bold mb-6 underline underline-offset-4 decoration-[1px]">
@@ -79,13 +133,30 @@ const ProductDetails = ({ params }: { params: { id: string } }) => {
                 onClick={() => handleOtherProductDetailsRoute(product._id)}
               >
                 <div className="relative w-[95.99px] h-[95.99px] bg-gray-200">
-                  <Image
-                    quality={100}
-                    sizes="(min-width: 768px) 100vw, 700px"
-                    src={x}
-                    alt="Product image"
-                    fill
-                  />
+                  {fetchedFile && fetchedFile.length > 0 && (
+                    <ul>
+                      {fetchedFile
+                        .filter((file) => {
+                          // Split the file name and remove the extension
+                          const fileNameWithoutExtension = file.name
+                            .split(".")
+                            .slice(0, -1)
+                            .join(".");
+                          // Check if the name without the extension matches the product ID
+                          return fileNameWithoutExtension === product._id;
+                        })
+                        .map((file: FileType) => (
+                          <Image
+                            key={file.id}
+                            quality={100}
+                            sizes="(min-width: 768px) 100vw, 300px"
+                            src={`https://utfs.io/f/${file.key}`}
+                            alt="Product image"
+                            fill
+                          />
+                        ))}
+                    </ul>
+                  )}
                 </div>
                 <div className="flex flex-col gap-2 font-semibold">
                   <h5 className="text-base font-medium">{product.name}</h5>
@@ -97,19 +168,40 @@ const ProductDetails = ({ params }: { params: { id: string } }) => {
             ))}
           </section>
         </section>
-        <section className="relative h-full min-h-[400px] xl:col-span-2 bg-gray-200">
-          <Image
-            quality={100}
-            sizes="(min-width: 768px) 100vw, 700px"
-            src={x}
-            alt="Product image"
-            fill
-          />
+        <section className="relative h-[400px] xl:col-span-2 bg-gray-200">
+          {fetchedFile && fetchedFile.length > 0 && (
+            <ul>
+              {fetchedFile
+                .filter((file) => {
+                  // Split the file name and remove the extension
+                  const fileNameWithoutExtension = file.name
+                    .split(".")
+                    .slice(0, -1)
+                    .join(".");
+                  // Check if the name without the extension matches the product ID
+                  return fileNameWithoutExtension === product._id;
+                })
+                .map((file: FileType) => (
+                  <Image
+                    key={file.id}
+                    quality={100}
+                    sizes="(min-width: 768px) 100vw, 300px"
+                    src={`https://utfs.io/f/${file.key}`}
+                    alt="Product image"
+                    fill
+                  />
+                ))}
+            </ul>
+          )}
         </section>
         <section className="h-full w-full md:col-span-2 xl:col-span-3 xl:p-14 flex flex-col gap-6 justify-center">
           <div className="flex flex-col gap-5">
-            <h2 className="text-4xl font-semibold">{product.name}</h2>
-            <p className="text-base text-gray-600">{product.description}</p>
+            <h2 className="text-4xl font-semibold">
+              {capitalizeFirstLetter(product.name)}
+            </h2>
+            <p className="text-base text-gray-600">
+              {capitalizeFirstLetter(product.description)}
+            </p>
             <button
               onClick={handleContactRoute}
               className="w-full py-4 bg-[#262626] hover:bg-black duration-300 text-white text-lg font-semibold"
@@ -118,7 +210,7 @@ const ProductDetails = ({ params }: { params: { id: string } }) => {
             </button>
             <p className="font-normal text-sm">
               <span className="text-base font-medium mr-2">Category:</span>
-              {product.category.name}
+              {capitalizeFirstLetter(product.category.name)}{" "}
             </p>
             <p className="font-normal text-sm">
               <span className="text-base font-medium mr-2 ">

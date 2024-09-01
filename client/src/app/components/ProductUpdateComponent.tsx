@@ -1,5 +1,9 @@
 "use client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useAppContext } from "../context/AppContext";
@@ -7,9 +11,12 @@ import { backend_uri } from "./AddProducts";
 import { ExtractedProductData, ICategory, ISubcategory } from "../utils/types";
 import { initialCategories } from "../utils/intialCategories";
 import DOMPurify from "dompurify";
-import { getProductsData, updateProduct } from "../action/actions";
+import { updateProduct } from "../action/actions";
 import SubmitButton from "./SubmitButton";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { productOptions } from "../utils/products";
+import Image from "next/image";
+import loading_image from "../../assets/loading.svg";
 
 const ProductUpdateComponent = () => {
   const queryClient = useQueryClient();
@@ -29,13 +36,14 @@ const ProductUpdateComponent = () => {
     ISubcategory[]
   >([]);
 
-  const { data, isPending, error } = useQuery({
-    queryKey: ["productsData"],
-    queryFn: () => getProductsData(),
-  });
+  const {
+    data,
+    isPending: isPendingFetch,
+    error,
+  } = useSuspenseQuery(productOptions);
 
   const _id = searchParams.get("_id") || "";
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (extractedData: ExtractedProductData) => {
       const accessToken = await getAccessTokenRaw();
 
@@ -71,7 +79,7 @@ const ProductUpdateComponent = () => {
       setShowModal(null);
       // Remove the search param from the URL after successful deletion
       router.replace(`/admin`); // Removes all query params
-      queryClient.invalidateQueries({ queryKey: ["productsData"] });
+      queryClient.invalidateQueries({ queryKey: ["product"] });
     },
     onError: (error: any) => {
       if (error.errors) {
@@ -193,106 +201,151 @@ const ProductUpdateComponent = () => {
     }
   }, [data, _id]);
 
-  return (
-    <form className="w-[100%] py-[2rem] mx-auto" ref={ref} action={formHandler}>
-      <div className="mb-5">
-        <label
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          htmlFor="name"
-        >
-          Product Name
-        </label>
-        <input
-          type="text"
-          id="name"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 focus:outline-none dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          value={name}
-          placeholder="Enter product name"
-          onChange={(e) => setName(e.target.value)}
-          required
+  if (isPendingFetch || isPending)
+    return (
+      <div className="w-[100%] flex justify-center items-center max-w-[1440px] mx-auto p-4 ">
+        <Image
+          quality={100}
+          sizes="(min-width: 768px) 100vw, 700px"
+          src={loading_image}
+          alt="hero image"
+          className="w-8 h-8"
         />
-        {updateErrors?.name && (
-          <p className="text-red-700 py-[0.3rem]">{updateErrors.name}</p>
-        )}
       </div>
-
-      <div className="mb-5">
-        <label
-          htmlFor="description"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        >
-          Description
-        </label>
-        <textarea
-          id="description"
-          value={description}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 focus:outline-none dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Type product description"
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-        {updateErrors?.description && (
-          <p className="text-red-700 py-[0.3rem]">{updateErrors.description}</p>
-        )}
-      </div>
-
-      <div className="mb-5">
-        <label
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          htmlFor="category"
-        >
-          Category
-        </label>
-        <select
-          id="category"
-          value={selectedCategory?.name || ""}
-          onChange={handleCategoryChange}
-          required
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 focus:outline-none dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        >
-          <option value="">Select a category</option>
-          {initialCategories.map((category) => (
-            <option key={category.name} value={category.name}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-        {updateErrors?.category && (
-          <p className="text-red-700 py-[0.3rem]">{updateErrors.category}</p>
-        )}
-      </div>
-
-      {selectedCategory && (
-        <div className="mb-5">
-          <p className="text-sm font-medium text-gray-900 dark:text-white pb-[0.5rem]">
-            Select {selectedCategory.name} subcategories
-          </p>
-          {selectedCategory.subcategories.map((subcategory) => (
-            <div key={subcategory.name}>
-              <label className="cursor-pointer w-[100%]">
-                <input
-                  type="checkbox"
-                  checked={selectedSubcategories.some(
-                    (sub) => sub.name === subcategory.name
-                  )}
-                  onChange={() => handleSubcategoryChange(subcategory)}
-                />
-                <span className="ml-[0.5rem] text-gray-900">
-                  {subcategory.name}
-                </span>
-              </label>
-            </div>
-          ))}
-          {updateErrors?.subcategories && (
-            <p className="text-red-700 py-[0.3rem]">
-              {updateErrors.subcategories}
-            </p>
-          )}
+    );
+  if (error) {
+    return (
+      <section className="w-full flex justify-center items-center min-h-[300px]">
+        <div className="text-center text-red-500">
+          <h2 className="text-2xl font-bold">Error</h2>
+          <p className="text-lg">{error.message}</p>
         </div>
-      )}
+      </section>
+    );
+  }
 
-      <SubmitButton />
-    </form>
+  return (
+    <>
+      {isPendingFetch ? (
+        <div className="w-[100%] py-[2rem] flex justify-center items-center max-w-[1440px] mx-auto p-4 ">
+          <Image
+            quality={100}
+            sizes="(min-width: 768px) 100vw, 700px"
+            src={loading_image}
+            alt="hero image"
+            className="w-8 h-8"
+          />
+        </div>
+      ) : (
+        <form
+          className="w-[100%] py-[2rem] mx-auto"
+          ref={ref}
+          action={formHandler}
+        >
+          <div className="mb-5">
+            <label
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              htmlFor="name"
+            >
+              Product Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 focus:outline-none dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              value={name}
+              placeholder="Enter product name"
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+            {updateErrors?.name && (
+              <p className="text-red-700 py-[0.3rem]">{updateErrors.name}</p>
+            )}
+          </div>
+
+          <div className="mb-5">
+            <label
+              htmlFor="description"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Description
+            </label>
+            <textarea
+              id="description"
+              value={description}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 focus:outline-none dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Type product description"
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+            {updateErrors?.description && (
+              <p className="text-red-700 py-[0.3rem]">
+                {updateErrors.description}
+              </p>
+            )}
+          </div>
+
+          <div className="mb-5">
+            <label
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              htmlFor="category"
+            >
+              Category
+            </label>
+            <select
+              id="category"
+              value={selectedCategory?.name || ""}
+              onChange={handleCategoryChange}
+              required
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 focus:outline-none dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="">Select a category</option>
+              {initialCategories.map((category) => (
+                <option key={category.name} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            {updateErrors?.category && (
+              <p className="text-red-700 py-[0.3rem]">
+                {updateErrors.category}
+              </p>
+            )}
+          </div>
+
+          {selectedCategory && (
+            <div className="mb-5">
+              <p className="text-sm font-medium text-gray-900 dark:text-white pb-[0.5rem]">
+                Select {selectedCategory.name} subcategories
+              </p>
+              {selectedCategory.subcategories.map((subcategory) => (
+                <div key={subcategory.name}>
+                  <label className="cursor-pointer w-[100%]">
+                    <input
+                      type="checkbox"
+                      checked={selectedSubcategories.some(
+                        (sub) => sub.name === subcategory.name
+                      )}
+                      onChange={() => handleSubcategoryChange(subcategory)}
+                    />
+                    <span className="ml-[0.5rem] text-gray-900">
+                      {subcategory.name}
+                    </span>
+                  </label>
+                </div>
+              ))}
+              {updateErrors?.subcategories && (
+                <p className="text-red-700 py-[0.3rem]">
+                  {updateErrors.subcategories}
+                </p>
+              )}
+            </div>
+          )}
+
+          <SubmitButton text="Update Product" isPending={isPending} />
+        </form>
+      )}
+    </>
   );
 };
 

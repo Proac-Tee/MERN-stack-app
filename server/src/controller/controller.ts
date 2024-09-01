@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import Product from "../schema/ProductSchema";
-import {
-  BaseError,
-  NotFoundError,
-  ValidationError,
-} from "../middlewares/errors";
+import { NotFoundError, ValidationError } from "../middlewares/errors";
+
+interface IProductId {
+  _id: string;
+}
 
 /**
  * Controller function to add a new product to the database
@@ -18,7 +18,7 @@ export const addNewProduct = async (
 ) => {
   const { name, description, category } = req.body;
 
-  // Validate required fields
+  // Validate srequired fields
   const errors: Record<string, string>[] = [];
   if (!name) errors.push({ field: "name", message: "Name is required!" });
   if (!description)
@@ -63,12 +63,14 @@ export const addNewProduct = async (
 
   try {
     // Save the new product to the database
-    await newProduct.save();
+    const result = await newProduct.save();
+    // Cast _id to string
+    const productId = (result as IProductId)._id.toString();
 
     // Respond with 201 status code and success message
     res.status(201).json({
       message: "Successfully added new Product",
-      newProduct,
+      productId,
     });
   } catch (error) {
     // Handle any errors that occur during the database operation
@@ -89,11 +91,6 @@ export const getAllProducts = async (
   try {
     // Retrieve all products from the database
     const products = await Product.find().exec();
-
-    // If no products are found, you can optionally throw a NotFoundError
-    if (!products || products.length === 0) {
-      return [];
-    }
 
     // Respond with 200 status code and the retrieved products
     res.status(200).json(products);
@@ -240,7 +237,6 @@ export const deleteProduct = async (
     // Respond with success message if Product was deleted
     res.status(200).json({
       message: "Successfully deleted Product",
-      deletedProduct, // Optionally include the deleted Product in the response
     });
   } catch (error) {
     // Forward any errors to the centralized error handler

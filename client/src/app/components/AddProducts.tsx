@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, DragEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { ExtractedProductData, ICategory, ISubcategory } from "../utils/types";
 import { initialCategories } from "../utils/intialCategories";
 import { addProduct } from "../action/actions";
@@ -9,6 +9,8 @@ import { useAppContext } from "../context/AppContext";
 import SubmitButton from "./SubmitButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import ImageUploadButton from "../utils/ImageUploadButton";
+import { useUploadThing } from "../utils/uploadthing";
 
 export const backend_uri = process.env.NEXT_PUBLIC_BACKEND_URI;
 
@@ -16,7 +18,7 @@ const AddProductForm = () => {
   const { isAuthenticated, user, isLoading, getAccessTokenRaw } =
     useKindeBrowserClient();
 
-  const { setShowModal, setErrors, errors } = useAppContext();
+  const { file, setFile, setShowModal, setErrors, errors } = useAppContext();
   const queryClient = useQueryClient();
   const ref = useRef<HTMLFormElement>(null);
   const [name, setName] = useState<string>("");
@@ -27,11 +29,20 @@ const AddProductForm = () => {
   const [selectedSubcategories, setSelectedSubcategories] = useState<
     ISubcategory[]
   >([]);
-  const [file, setFile] = useState<File | null>(null);
 
-  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const { startUpload } = useUploadThing("imageUploader", {
+    onClientUploadComplete: () => {
+      alert("Product Image Uploaded successfully!");
+    },
+    onUploadError: () => {
+      alert("Error occurred while uploading Product Image");
+    },
+    onUploadBegin: () => {
+      alert("Please wait Product Image Upload has begun");
+    },
+  });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (formData: ExtractedProductData) => {
       const accessToken = await getAccessTokenRaw();
 
@@ -46,6 +57,7 @@ const AddProductForm = () => {
       });
 
       const data = await response.json();
+
       if (data.status === "fail" && Array.isArray(data.data)) {
         // Format the error messages into a more usable format
         const formattedErrors: { [key: string]: string } = {};
@@ -61,14 +73,31 @@ const AddProductForm = () => {
         throw data; // Throw the entire data object, which includes errors
       }
 
+      const productId = data.productId;
+
+      // Handle file upload after product creation
+      if (file && productId) {
+        const renamedFile = new File(
+          [file],
+          `${productId}.${file.name.split(".").pop()}`,
+          {
+            type: file.type,
+          }
+        );
+
+        startUpload([renamedFile]);
+      }
+
       return data;
     },
     onSuccess: (data) => {
       alert(data.message);
       ref.current?.reset();
+      setFile(null);
       setShowModal(null);
-      queryClient.invalidateQueries({ queryKey: ["productsData"] });
+      queryClient.invalidateQueries({ queryKey: ["product"] });
     },
+
     onError: (error: any) => {
       if (error.errors) {
         // Display field-specific errors
@@ -109,48 +138,6 @@ const AddProductForm = () => {
     }
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      validateAndSetFile(selectedFile);
-    }
-  };
-
-  const handleDragOver = (e: DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e: DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile) {
-      validateAndSetFile(droppedFile);
-    }
-  };
-
-  const validateAndSetFile = (selectedFile: File) => {
-    if (
-      selectedFile.type === "image/png" ||
-      selectedFile.type === "image/jpeg"
-    ) {
-      if (selectedFile.size <= 5 * 1024 * 1024) {
-        // Check if the file size is within the limit (5MB)
-        setFile(selectedFile);
-        setErrors(null);
-      } else {
-        setErrors({ file: "File size exceeds 5MB" });
-      }
-    } else {
-      setErrors({ file: "Invalid file type. Only PNG or JPG is allowed." });
-    }
-  };
-
   const formHandler = async (formData: FormData) => {
     if (!selectedCategory) {
       setErrors({ category: "Please select a category" });
@@ -174,15 +161,15 @@ const AddProductForm = () => {
       formData.append("subcategories[]", sub.name)
     );
 
-    // if (file) {
-    //   formData.set("file", file);
-    // }
-
     // Convert FormData to a plain object for client side validation
     const sanitizedData: { [key: string]: string } = {};
     formData.forEach((value, key) => {
       sanitizedData[key] = DOMPurify.sanitize(value as string);
     });
+
+    // if (file) {
+    //   formData.set("file", file);
+    // }
 
     const response = await addProduct(formData);
 
@@ -197,6 +184,7 @@ const AddProductForm = () => {
             name: sub.name,
           })),
         },
+        file: file,
       };
 
       mutate(extractedData);
@@ -304,65 +292,13 @@ const AddProductForm = () => {
       )}
 
       <div className="mb-5">
-        <label
-          htmlFor="file"
-          className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 dark:border-gray-600 
-          ${
-            isDragging
-              ? "bg-gray-100 dark:bg-gray-600 border-blue-500"
-              : "border-gray-300"
-          }`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-          <div className="flex flex-col items-center justify-center text-center pt-5 pb-6 px-[0.4rem]">
-            <svg
-              className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 16"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-              />
-            </svg>
-            {file ? (
-              <p className="text-green-700 py-[0.3rem]">
-                Selected file: {file.name}
-              </p>
-            ) : (
-              <div>
-                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                  <span className="font-semibold">Click to upload</span> or drag
-                  and drop
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  PNG or JPG (MAX. 5MB)
-                </p>
-              </div>
-            )}
-          </div>
-          <input
-            id="file"
-            type="file"
-            onChange={handleFileChange}
-            required
-            className="hidden"
-            accept="image/png, image/jpeg"
-          />
-        </label>
+        <ImageUploadButton />
         {errors?.file && (
           <p className="text-red-700 py-[0.3rem]">{errors.file}</p>
         )}
       </div>
 
-      <SubmitButton />
+      <SubmitButton text="Add Product" isPending={isPending} />
     </form>
   );
 };
