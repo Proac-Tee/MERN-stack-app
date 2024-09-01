@@ -106,9 +106,9 @@ const Product: React.FC = () => {
   }
 
   return (
-    <section className="max-w-[1440px] mx-auto p-4 my-[2.5rem]">
+    <section className="max-w-[1440px] mx-auto p-4 md:my-[2.5rem]">
       <div className="w-full py-10 xl:py-10 flex flex-col gap-3">
-        <h1 className="text-5xl text-primary_black font-titleFont font-bold">
+        <h1 className="text-3xl md:text-5xl text-primary_black font-titleFont font-bold">
           Products
         </h1>
       </div>
