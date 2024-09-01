@@ -1,9 +1,12 @@
 "use client";
+import { useAppContext } from "@/app/context/AppContext";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const ProductSearchHeader = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { showMobileFilter, setShowMobileFilter } = useAppContext();
+
   const router = useRouter();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,11 +25,18 @@ const ProductSearchHeader = () => {
     router.push(`/products?${params.toString()}`);
   };
 
+  const filterHandler = () => {
+    setShowMobileFilter(!showMobileFilter);
+  };
+
   return (
     <section className=" w-full bg-[#F5F5F3] relative">
       <section className="max-w-[1440px] mx-auto">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full px-4 pb-4 lg:pb-0 h-full lg:h-24">
-          <div className="flex h-14 cursor-pointer items-center gap-2 text-primary_black md:hidden">
+          <div
+            onClick={filterHandler}
+            className="flex h-14 cursor-pointer items-center gap-2 text-primary_black md:hidden"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

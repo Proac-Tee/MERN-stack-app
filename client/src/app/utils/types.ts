@@ -50,6 +50,16 @@ export interface ExtractedProductData {
   file?: File; // Optional if not always required
 }
 
+export type SubCategory = {
+  name: string;
+  selected: boolean;
+};
+
+export type Category = {
+  name: string;
+  subcategories: SubCategory[];
+};
+
 // Zod validation schema for the product data
 export const ProductSchema = z.object({
   name: z.string().min(1, "Product name is required"),

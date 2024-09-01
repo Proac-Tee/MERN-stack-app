@@ -10,6 +10,7 @@ import { ICategory, IProduct } from "@/app/utils/types";
 import Image from "next/image";
 import loading_image from "../../../assets/loading.svg";
 import { productOptions } from "@/app/utils/products";
+import MobileProductFilter from "./MobileProductFilter";
 
 const Product: React.FC = () => {
   const router = useRouter();
@@ -17,6 +18,9 @@ const Product: React.FC = () => {
   const [filteredData, setFilteredData] = useState<IProduct[]>([]);
 
   const { data, isPending, error } = useSuspenseQuery(productOptions);
+
+  // Add categories state
+  const [categories, setCategories] = useState<ICategory[]>(initialCategories);
 
   useEffect(() => {
     if (data && data.length > 0) {
@@ -34,6 +38,8 @@ const Product: React.FC = () => {
         }
       });
     });
+
+    setCategories(updatedCategories); // Update the state with the modified categories
 
     router.push(`/products?${params.toString()}`, { scroll: false });
   };
@@ -107,6 +113,12 @@ const Product: React.FC = () => {
 
   return (
     <section className="max-w-[1440px] mx-auto p-4 md:my-[2.5rem]">
+      <div className="block md:hidden">
+        <MobileProductFilter
+          categories={categories}
+          onSelectionChange={updateSearchParams}
+        />
+      </div>
       <div className="w-full py-10 xl:py-10 flex flex-col gap-3">
         <h1 className="text-3xl md:text-5xl text-primary_black font-titleFont font-bold">
           Products
@@ -116,7 +128,7 @@ const Product: React.FC = () => {
       <div className="w-full h-full flex pb-20 gap-10">
         <aside className="w-[20%] md:w-[25%] hidden md:inline-flex h-full">
           <SideNav
-            categories={initialCategories}
+            categories={categories}
             onSelectionChange={updateSearchParams}
           />
         </aside>

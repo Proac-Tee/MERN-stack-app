@@ -1,15 +1,6 @@
 "use client";
+import { Category } from "@/app/utils/types";
 import React, { useState } from "react";
-
-type SubCategory = {
-  name: string;
-  selected: boolean;
-};
-
-type Category = {
-  name: string;
-  subcategories: SubCategory[];
-};
 
 type SideNavProps = {
   categories: Category[];

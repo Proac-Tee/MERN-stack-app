@@ -11,6 +11,8 @@ type AppContextProps = {
   errors: { [key: string]: string } | null;
   updateErrors: { [key: string]: string } | null;
   file: File | null;
+  showMobileFilter: boolean;
+  setShowMobileFilter: (filterState: boolean) => void;
   setFile: (fileToUpload: File | null) => any;
   setShowModal: (modalName: string | null) => void;
   setShowDropdown: (dropdownState: boolean) => void;
@@ -35,6 +37,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     null
   );
   const [file, setFile] = useState<File | null>(null);
+  const [showMobileFilter, setShowMobileFilter] = useState<boolean>(false);
 
   const [errors, setErrors] = useState<{ [key: string]: string } | null>(null);
   const [updateErrors, setUpdateErrors] = useState<{
@@ -58,6 +61,8 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setOpenProfile,
     file,
     setFile,
+    showMobileFilter,
+    setShowMobileFilter,
   };
 
   return (
