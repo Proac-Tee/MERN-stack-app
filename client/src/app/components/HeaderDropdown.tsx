@@ -50,7 +50,7 @@ const HeaderDropdown = () => {
         <li>
           <Link
             onClick={profileHandler}
-            href={`/chat`}
+            href={`/admin/chat`}
             className="h-[40px] cursor-pointer hover:bg-gray-100 transition-all duration-300 ease-in-out px-[1rem] py-[0.625rem] flex gap-[1.1rem] text-[0.875rem] items-center"
           >
             <span>
