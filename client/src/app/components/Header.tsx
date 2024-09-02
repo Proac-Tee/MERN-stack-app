@@ -45,7 +45,7 @@ const Header: FC = () => {
 
   return (
     <header
-      className={` border-b border-gray-200 ${plus_Jakarta_Sans.className}`}
+      className={`bg-white  border-b border-gray-200 ${plus_Jakarta_Sans.className}`}
     >
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
