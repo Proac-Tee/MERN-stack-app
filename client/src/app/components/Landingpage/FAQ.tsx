@@ -48,7 +48,7 @@ const FAQ: FC = () => {
     <section>
       <div className="flex flex-col gap-[0.5rem] pt-[1rem] md:pt-[6rem]">
         <h3
-          className={`text-white leading-[1.75rem] md:leading-[2.75rem] font-semibold text-[1.25rem] md:text-[2.25rem] text-center ${plus_Jakarta_Sans.className}`}
+          className={`text-primary_black leading-[1.75rem] md:leading-[2.75rem] font-semibold text-[1.25rem] md:text-[2.25rem] text-center ${plus_Jakarta_Sans.className}`}
         >
           Frequently asked questions
         </h3>
@@ -97,7 +97,7 @@ const FAQ: FC = () => {
           </div>
           <Link
             href={`/contact-us`}
-            className="w-[130px] h-[44px] flex justify-center items-center rounded-[0.5rem] bg-primary_color text-white text-[1rem] font-medium hover:brightness-75 "
+            className={`bg-[#0D0D0D] text-white w-fit h-[3.25rem] py-[1.5rem] px-[3rem] border-[1px] border-[#0D0D0D] flex justify-center items-center font-medium text-[0.875rem] md:text-[1.125rem] leading-[24px] hover:bg-white hover:text-primary_black transition-all ease-in-out duration-300 ${plus_Jakarta_Sans.className}`}
           >
             Get in touch
           </Link>

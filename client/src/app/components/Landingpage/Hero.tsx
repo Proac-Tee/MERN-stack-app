@@ -25,7 +25,7 @@ const Hero: FC = () => {
           <div className="flex flex-wrap items-center gap-[1rem] md:gap-[2rem]">
             <Link
               href={`/contact-us`}
-              className={`bg-primary_color text-white w-fit h-[3.25rem] py-[1.5rem] px-[3rem] rounded-[10px] flex justify-center items-center font-bold text-[0.875rem] md:text-[1.125rem] leading-[24px] hover:brightness-75 transition-all ease-in-out duration-300 ${plus_Jakarta_Sans.className}`}
+              className={` text-white w-fit h-[3.25rem] py-[1.5rem] px-[3rem] bg-[#0D0D0D] border-[1px] border-[#0D0D0D] flex justify-center items-center font-medium text-[0.875rem] md:text-[1.125rem] leading-[24px] hover:bg-white hover:text-primary_black transition-all ease-in-out duration-300 ${plus_Jakarta_Sans.className}`}
             >
               Contact Us
             </Link>

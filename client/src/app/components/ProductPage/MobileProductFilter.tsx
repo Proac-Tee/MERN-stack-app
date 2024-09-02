@@ -170,21 +170,21 @@ const MobileProductFilter: React.FC<SideNavProps> = ({
             <div className="flex flex-col gap-[1rem]">
               <button
                 onClick={resetFilterHandler}
-                className=" flex text-black text-[0.875rem] font-[600] items-center justify-center hover:brightness-75 border-[1px] t border-primary_color rounded-full h-[48px] w-[100%] p-[0.5rem]"
+                className=" flex text-black text-[0.875rem] font-[600] items-center justify-center  border-[1px] bg-white border-[#0D0D0D] hover:border-primary_color rounded-full h-[48px] w-[100%] p-[0.5rem]"
               >
                 Reset Filter
               </button>
               <button
                 onClick={filterHandler}
-                className=" flex text-[white] text-[0.875rem] font-[600] items-center justify-center hover:brightness-75 bg-primary_color rounded-full h-[48px] w-[100%] p-[0.5rem]"
+                className=" flex text-[white] text-[0.875rem] font-[600] items-center justify-center border-[1px] bg-[#0D0D0D] border-[#0D0D0D] hover:text-black hover:bg-slate-200  rounded-full h-[48px] w-[100%] p-[0.5rem]"
               >
-                Apply Filter
+                Close Filter
               </button>
             </div>
           ) : (
             <button
               onClick={filterHandler}
-              className=" flex text-[white] text-[0.875rem] font-[600] items-center justify-center hover:brightness-75 bg-primary_color rounded-full h-[48px] w-[100%] p-[0.5rem]"
+              className=" flex text-[white] text-[0.875rem] font-[600] items-center justify-center border-[1px] bg-[#0D0D0D] border-[#0D0D0D] hover:bg-white hover:text-primary_black rounded-full h-[48px] w-[100%] p-[0.5rem]"
             >
               Apply Filter
             </button>

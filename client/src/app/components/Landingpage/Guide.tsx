@@ -3,16 +3,16 @@ import React from "react";
 
 const Guide = () => {
   return (
-    <section className="py-10 bg-white sm:py-16 lg:py-24">
+    <section className="py-10 bg-gradient-to-r from-rose-700 to-pink-600 sm:py-16 lg:py-24 ">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center">
           <h2
-            className={`text-3xl font-bold leading-tight text-primary_black sm:text-4xl lg:text-5xl ${plus_Jakarta_Sans.className}`}
+            className={`text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl ${plus_Jakarta_Sans.className}`}
           >
             How does it work?
           </h2>
           <p
-            className={`max-w-lg mx-auto mt-4 text-base leading-relaxed text-gray-600 ${inter.className}`}
+            className={`max-w-lg mx-auto mt-4 text-base leading-relaxed text-white ${inter.className}`}
           >
             Turnkey Brand Curation in Three Easy Steps
           </p>
@@ -43,11 +43,11 @@ const Guide = () => {
                 <span className="text-xl font-semibold text-gray-700"> 1 </span>
               </div>
               <h3
-                className={`mt-6 text-xl font-semibold leading-tight text-primary_black md:mt-10 ${plus_Jakarta_Sans.className}`}
+                className={`mt-6 text-xl font-semibold leading-tight text-white md:mt-10 ${plus_Jakarta_Sans.className}`}
               >
                 Customize your vision
               </h3>
-              <p className={`mt-4 text-base text-gray-600 ${inter.className}`}>
+              <p className={`mt-4 text-base text-white ${inter.className}`}>
                 Start by exploring our product page, where you can browse
                 through a wide range of options tailored to your needs. Use our
                 powerful filters to easily find the products that align with
@@ -60,11 +60,11 @@ const Guide = () => {
                 <span className="text-xl font-semibold text-gray-700"> 2 </span>
               </div>
               <h3
-                className={`mt-6 text-xl font-semibold leading-tight text-primary_black md:mt-10 ${plus_Jakarta_Sans.className}`}
+                className={`mt-6 text-xl font-semibold leading-tight text-white md:mt-10 ${plus_Jakarta_Sans.className}`}
               >
                 Streamline procurement
               </h3>
-              <p className={`mt-4 text-base text-gray-600 ${inter.className}`}>
+              <p className={`mt-4 text-base text-white ${inter.className}`}>
                 Once you&rsquo;ve selected your products, reach out to our
                 support team to discuss any customizations or specific needs.
                 Our team is here to help ensure everything is perfectly aligned
@@ -77,11 +77,11 @@ const Guide = () => {
                 <span className="text-xl font-semibold text-gray-700"> 3 </span>
               </div>
               <h3
-                className={`mt-6 text-xl font-semibold leading-tight text-primary_black md:mt-10 ${plus_Jakarta_Sans.className}`}
+                className={`mt-6 text-xl font-semibold leading-tight text-white md:mt-10 ${plus_Jakarta_Sans.className}`}
               >
                 Execute Flawlessly
               </h3>
-              <p className={`mt-4 text-base text-gray-600 ${inter.className}`}>
+              <p className={`mt-4 text-base text-white ${inter.className}`}>
                 After confirming the details and making the payment, your order
                 will be processed and shipped. You&rsquo;ll receive regular
                 updates to track your order&rsquo;s journey until it arrives at
