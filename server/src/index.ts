@@ -28,7 +28,7 @@ async function main() {
 // Middleware to restrict cross origin access
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL, // Specify the origin allowed to access your backend
+    origin: process.env.FRONTEND_URL || "https://zhengroup.vercel.app", // Specify the origin allowed to access your backend
     methods: ["GET,POST,PUT,DELETE"], // Specify the HTTP methods allowed
     credentials: true, // Allow cookies and HTTP authentication to be included in requests
     allowedHeaders: ["Content-Type", "Authorization"], // Allow only these headers
