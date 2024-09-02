@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import SideNav from "./SideNav";
 import ProductGrid from "@/app/utils/ProductGrid";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -12,26 +12,27 @@ import loading_image from "../../../assets/loading.svg";
 import { productOptions } from "@/app/utils/products";
 import MobileProductFilter from "./MobileProductFilter";
 
-// Fallback UI for loading state
+// Loading fallback component
 const LoadingFallback = () => (
   <div className="w-[100%] flex justify-center items-center max-w-[1440px] mx-auto p-4 ">
     <Image
       quality={100}
       sizes="(min-width: 768px) 100vw, 700px"
       src={loading_image}
-      alt="hero image"
+      alt="Loading"
       className="w-8 h-8"
     />
   </div>
 );
 
-const ProductContent: React.FC = () => {
+const ProductPage: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [filteredData, setFilteredData] = useState<IProduct[]>([]);
 
   const { data, isPending, error } = useSuspenseQuery(productOptions);
 
+  // Add categories state
   const [categories, setCategories] = useState<ICategory[]>(initialCategories);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ const ProductContent: React.FC = () => {
       });
     });
 
-    setCategories(updatedCategories);
+    setCategories(updatedCategories); // Update the state with the modified categories
 
     router.push(`/products?${params.toString()}`, { scroll: false });
   };
@@ -62,11 +63,13 @@ const ProductContent: React.FC = () => {
     const searchQuery = searchParams.get("search")?.toLowerCase() || "";
     const selectedSubcategories = searchParams.getAll("subcategory");
 
+    // Filter by search query (matches product name)
     if (searchQuery) {
       filteredProducts = filteredProducts.filter((product: IProduct) =>
         product.name.toLowerCase().includes(searchQuery)
       );
     }
+    // Filter by selected subcategories
     if (selectedSubcategories.length > 0) {
       filteredProducts = filteredProducts.filter((product: IProduct) =>
         product.category.subcategories.some((sub) =>
@@ -78,9 +81,31 @@ const ProductContent: React.FC = () => {
     setFilteredData(filteredProducts);
   };
 
-  if (isPending) return <LoadingFallback />;
+  if (isPending)
+    return (
+      <div className="w-[100%] flex justify-center items-center max-w-[1440px] mx-auto p-4 ">
+        <Image
+          quality={100}
+          sizes="(min-width: 768px) 100vw, 700px"
+          src={loading_image}
+          alt="hero image"
+          className="w-8 h-8"
+        />
+      </div>
+    );
 
   if (error) {
+    return (
+      <section className="w-full flex justify-center items-center min-h-[300px]">
+        <div className="text-center text-red-500">
+          <h2 className="text-2xl font-bold">Error</h2>
+          <p className="text-lg">{data.message}</p>
+        </div>
+      </section>
+    );
+  }
+
+  if ("status" in data && data.status === "error") {
     return (
       <section className="w-full flex justify-center items-center min-h-[300px]">
         <div className="text-center text-red-500">
@@ -128,10 +153,10 @@ const ProductContent: React.FC = () => {
   );
 };
 
-const Product: React.FC = () => {
+const Product = () => {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ProductContent />
+      <ProductPage />
     </Suspense>
   );
 };
