@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import SideNav from "./SideNav";
 import ProductGrid from "@/app/utils/ProductGrid";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -112,31 +112,45 @@ const Product: React.FC = () => {
   }
 
   return (
-    <section className="max-w-[1440px] mx-auto p-4 md:my-[2.5rem]">
-      <div className="block md:hidden">
-        <MobileProductFilter
-          categories={categories}
-          onSelectionChange={updateSearchParams}
-        />
-      </div>
-      <div className="w-full py-10 xl:py-10 flex flex-col gap-3">
-        <h1 className="text-3xl md:text-5xl text-primary_black font-titleFont font-bold">
-          Products
-        </h1>
-      </div>
-
-      <div className="w-full h-full flex pb-20 gap-10">
-        <aside className="w-[20%] md:w-[25%] hidden md:inline-flex h-full">
-          <SideNav
+    <Suspense
+      fallback={
+        <div className="w-[100%] flex justify-center items-center max-w-[1440px] mx-auto p-4 ">
+          <Image
+            quality={100}
+            sizes="(min-width: 768px) 100vw, 700px"
+            src={loading_image}
+            alt="hero image"
+            className="w-8 h-8"
+          />
+        </div>
+      }
+    >
+      <section className="max-w-[1440px] mx-auto p-4 md:my-[2.5rem]">
+        <div className="block md:hidden">
+          <MobileProductFilter
             categories={categories}
             onSelectionChange={updateSearchParams}
           />
-        </aside>
-        <section className="w-full md:w-[80%] lg:w-[75%] h-full flex flex-col gap-10">
-          <ProductGrid products={filteredData} />
-        </section>
-      </div>
-    </section>
+        </div>
+        <div className="w-full py-10 xl:py-10 flex flex-col gap-3">
+          <h1 className="text-3xl md:text-5xl text-primary_black font-titleFont font-bold">
+            Products
+          </h1>
+        </div>
+
+        <div className="w-full h-full flex pb-20 gap-10">
+          <aside className="w-[20%] md:w-[25%] hidden md:inline-flex h-full">
+            <SideNav
+              categories={categories}
+              onSelectionChange={updateSearchParams}
+            />
+          </aside>
+          <section className="w-full md:w-[80%] lg:w-[75%] h-full flex flex-col gap-10">
+            <ProductGrid products={filteredData} />
+          </section>
+        </div>
+      </section>
+    </Suspense>
   );
 };
 
