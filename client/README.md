@@ -1,18 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Nextjs
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
@@ -34,3 +20,63 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## About the Stack
+
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React Query](https://img.shields.io/badge/React_Query-FF4154?style=for-the-badge&logo=react-query&logoColor=white)](https://tanstack.com/query/v4)
+[![Kinde Auth](https://img.shields.io/badge/Kinde_Auth-FF4F00?style=for-the-badge&logo=kinde&logoColor=white)](https://kinde.com/)
+
+---
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone git clone https://github.com/Proac-Tee/express_api.git
+```
+
+Go to the project directory
+
+```bash
+  cd express_api/client
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run dev
+```
+
+### File strucutrue of important files
+
+```sh
+src/
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── globals.css
+│   ├── assets/
+│   ├── about-us/
+│   │   └── page.tsx
+│   ├── action/
+│   ├── admin/
+│   │   └── page.tsx
+│   ├── api/
+│   ├── components/
+│   ├── contact-us/
+│   │   └── page.tsx
+│   ├── context/
+│   ├── products/
+│   │   └── page.tsx
+│   ├── utils/
+│
+│
+```
