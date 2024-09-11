@@ -34,13 +34,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 Clone the project
 
 ```bash
-  git clone git clone https://github.com/Proac-Tee/express_api.git
+  git clone git clone https://github.com/Proac-Tee/MERN-stack-app.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd express_api/client
+  cd MERN-stack-app/client
 ```
 
 Install dependencies

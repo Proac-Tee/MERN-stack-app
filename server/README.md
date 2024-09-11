@@ -59,13 +59,13 @@ To run this project, you will need to add the following environment variables to
 Clone the project
 
 ```bash
-  git clone git clone https://github.com/Proac-Tee/express_api.git
+  git clone git clone https://github.com/Proac-Tee/MERN-stack-app.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd express_api/server
+  cd MERN-stack-app/server
 ```
 
 Install dependencies
